@@ -885,7 +885,7 @@ function getMsalInstance(){
     auth: {
       clientId: "964ce9ed-71b4-4721-ad8c-f0a5a55f70f3",
       authority: "https://login.microsoftonline.com/c7f9da59-530d-46c8-8b39-3498e164b8f3",
-      redirectUri: window.location.origin
+      redirectUri: window.location.origin + window.location.pathname.replace(/index\.html$/, '')
     },
     cache: { cacheLocation: "sessionStorage" }
   });
