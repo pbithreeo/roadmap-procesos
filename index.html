@@ -845,6 +845,7 @@ function addDoc(id){
 /* ---- DOC DETAIL MODAL ---- */
 function openDoc(procId, idx){
   const d = DOC_CONFIG[procId][idx];
+  if(d.url){ window.open(d.url, '_blank', 'noopener'); return; }
   const col = DOC_COLOR[d.type]||'accent';
   document.getElementById('docModal').innerHTML = `
     <button class="back" onclick="closeDoc()">&#8592; Volver al proceso</button>
