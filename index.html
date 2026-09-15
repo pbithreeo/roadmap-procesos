@@ -266,10 +266,11 @@ main{padding:0 24px;max-width:none;margin:0 auto;width:100%;flex:1;box-sizing:bo
 .pcard-close:hover{background:rgba(255,255,255,0.15);}
 .pcard-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:22px;}
 .pcard-icon{width:64px;height:64px;border-radius:18px;background:rgba(76,154,255,0.16);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--accent);}
+.pcard-icon svg{width:35px;height:35px;}
 .pcard-titlewrap{padding-top:2px;}
 .pcard-title{font-size:23px;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin:0 0 10px;}
 .pcard-pill{display:inline-block;background:var(--accent);color:#fff;font-size:11.5px;font-weight:600;padding:4px 12px;border-radius:999px;}
-.pcard-section{margin-top:22px;padding-top:20px;border-top:1px solid var(--line);}
+.pcard-section{margin-top:5px;padding-top:20px;border-top:1px solid var(--line);}
 .pcard-section h4{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-mute);margin:0 0 12px;font-weight:600;}
 .pcard-desc{font-size:14px;line-height:1.65;color:#dfe9f2;}
 .figuras-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;}
@@ -465,6 +466,7 @@ const ICONS = {
   list: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>',
   user: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>',
   hardhat: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 18v-2a8 8 0 0 1 16 0v2"/><path d="M2 18h20"/><path d="M12 8V4"/></svg>',
+  flowchart: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="6" height="5" rx="1"/><rect x="15" y="3" width="6" height="5" rx="1"/><rect x="9" y="16" width="6" height="5" rx="1"/><path d="M6 8v3a2 2 0 0 0 2 2h1m9-5v3a2 2 0 0 1-2 2h-1M12 13v3"/></svg>',
   building: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="3" width="12" height="18"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/></svg>'
 };
 function iconFor(role){
@@ -481,8 +483,8 @@ function colorFor(role){
   if(r.includes('estimat')) return 'teal';
   return 'accent';
 }
-const DOC_ICON = {Procedimiento:ICONS.file, "Política":ICONS.shield, Formato:ICONS.download, Instructivo:ICONS.list, Checklist:ICONS.list};
-const DOC_COLOR = {Procedimiento:'accent', "Política":'green', Formato:'amber', Instructivo:'purple', Checklist:'purple'};
+const DOC_ICON = {Procedimiento:ICONS.file, "Política":ICONS.shield, Formato:ICONS.download, Instructivo:ICONS.list, Checklist:ICONS.list, Flujograma:ICONS.flowchart};
+const DOC_COLOR = {Procedimiento:'accent', "Política":'green', Formato:'amber', Instructivo:'purple', Checklist:'purple', Flujograma:'teal'};
 
 let DOC_TYPES = JSON.parse(localStorage.getItem('o_doctypes')||'null') || [];
 let DOC_CONFIG = JSON.parse(localStorage.getItem('o_docconfig')||'null') || {};
@@ -843,7 +845,6 @@ function renderProcModal(){
       ${p.tools?`<span><b>Herramientas:</b> ${p.tools}</span>`:''}
     </div>
     <div class="pcard-section"><h4>Descripción del proceso</h4><p class="pcard-desc">${p.scope}</p></div>
-    <div class="pcard-section"><h4>Figuras clave</h4><div class="figuras-grid">${figurasHtml}</div></div>
     <div class="pcard-section"><h4>Documentos relacionados</h4><div class="doc-list">${docsHtml}</div>${adminHtml}</div>
   `;
 }
