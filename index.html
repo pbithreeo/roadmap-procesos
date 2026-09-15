@@ -315,7 +315,8 @@ main{padding:0 24px;max-width:none;margin:0 auto;width:100%;flex:1;box-sizing:bo
 .toggle-sw.on::after{left:18px;}
 .admin-del{background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:0 4px;}
 
-footer{height:40px;border-top:1px solid var(--line);}
+footer{height:40px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:10px;font-size:11.5px;color:var(--text-mute);}
+footer .ver{opacity:.6;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.7.0/lib/msal-browser.min.js" onerror="document.getElementById('loginStatus').innerHTML='<span style=color:#ff6a5f>❌ La librería de login no cargó (red/firewall/extensión). Avisa a soporte.</span>'"></script>
 </head>
@@ -441,7 +442,7 @@ footer{height:40px;border-top:1px solid var(--line);}
     </div>
   </main>
 
-  <footer></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v47</span></footer>
 </div>
 
 <div class="modal-overlay" id="procModalOverlay">
