@@ -333,7 +333,7 @@ footer .ver{opacity:.6;}
     </button>
     <p class="login-status" id="loginStatus"></p>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v49</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v50</span></div>
 </div>
 
 <div id="app">
@@ -444,7 +444,7 @@ footer .ver{opacity:.6;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v49</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v50</span></footer>
 </div>
 
 <div class="modal-overlay" id="procModalOverlay">
@@ -486,8 +486,8 @@ function colorFor(role){
   if(r.includes('estimat')) return 'teal';
   return 'accent';
 }
-const DOC_ICON = {Procedimiento:ICONS.file, "Política":ICONS.shield, Formato:ICONS.download, Instructivo:ICONS.list, Checklist:ICONS.list, Flujograma:ICONS.flowchart};
-const DOC_COLOR = {Procedimiento:'accent', "Política":'green', Formato:'amber', Instructivo:'purple', Checklist:'purple', Flujograma:'teal'};
+const DOC_ICON = {Procedimiento:ICONS.file, "Política":ICONS.shield, Formato:ICONS.download, Instructivo:ICONS.list, Checklist:ICONS.list, "Diagrama de Flujo":ICONS.flowchart, Flujograma:ICONS.flowchart};
+const DOC_COLOR = {Procedimiento:'accent', "Política":'green', Formato:'amber', Instructivo:'purple', Checklist:'purple', "Diagrama de Flujo":'teal', Flujograma:'teal'};
 
 let DOC_TYPES = JSON.parse(localStorage.getItem('o_doctypes')||'null') || [];
 let DOC_CONFIG = JSON.parse(localStorage.getItem('o_docconfig')||'null') || {};
