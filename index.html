@@ -49,6 +49,23 @@ html,body{height:100%;}
 .login-btn:disabled{opacity:.6;cursor:default;}
 .login-status{font-size:12.5px;color:var(--text-mute);margin-top:18px;line-height:1.6;min-height:18px;}
 .login-status.err{color:var(--red);}
+.login-spinner{display:none;margin:14px auto 0;--color-1:var(--accent);--color-2:#8fd3ff;--size:2.2px;
+  transform:rotateZ(45deg);perspective:calc(1000*var(--size));border-radius:50%;
+  width:calc(48*var(--size));height:calc(48*var(--size));color:var(--color-1);}
+.login-spinner.on{display:block;}
+.login-spinner:before,.login-spinner:after{content:'';display:block;position:absolute;width:inherit;height:inherit;
+  border-radius:50%;transform:rotateX(70deg);animation:loaderSpin 1s linear infinite;}
+.login-spinner:after{color:var(--color-2);transform:rotateY(70deg);animation-delay:.4s;}
+@keyframes loaderSpin{
+  0%,100%{box-shadow:0.2em 0 0 0 currentcolor;}
+  12%{box-shadow:0.2em 0.2em 0 0 currentcolor;}
+  25%{box-shadow:0 0.2em 0 0 currentcolor;}
+  37%{box-shadow:-0.2em 0.2em 0 0 currentcolor;}
+  50%{box-shadow:-0.2em 0 0 0 currentcolor;}
+  62%{box-shadow:-0.2em -0.2em 0 0 currentcolor;}
+  75%{box-shadow:0 -0.2em 0 0 currentcolor;}
+  87%{box-shadow:0.2em -0.2em 0 0 currentcolor;}
+}
 
 header.top{
   height:81px;box-sizing:border-box;
@@ -98,10 +115,21 @@ main{padding:0 24px;max-width:none;margin:0 auto;width:100%;flex:1;box-sizing:bo
 .low-link{background:none;border:none;color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;padding:0;}
 .low-link:hover{color:#fff;}
 
-.macro-flow{display:grid;grid-template-columns:1fr 22px 1fr 22px 1fr 22px 1fr 22px 1fr 22px 1fr;gap:0;flex:570 1 0;min-height:0;align-items:stretch;}
+.macro-flow-wrap{flex:570 1 0;min-height:0;display:flex;flex-direction:column;gap:14px;}
+.macro-flow{display:grid;grid-template-columns:1fr 22px 1fr 22px 1fr 22px 1fr 22px 1fr 22px 1fr;gap:0;flex:1 1 auto;min-height:0;align-items:stretch;}
+.macro-transversal{flex:0 0 auto;display:flex;flex-direction:column;gap:10px;}
+.trans-bar{
+  width:100%;text-align:left;padding:16px 20px;border-radius:20px;
+  background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--line-strong);
+  color:var(--text);cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;
+  display:flex;align-items:center;gap:14px;
+}
+.trans-bar:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 14px 36px rgba(76,154,255,0.3);}
+.trans-bar .tag{font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;font-weight:600;}
+.trans-bar .name{font-size:17px;font-weight:700;}
 .macro-stage{
   min-width:0;background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--line-strong);
-  border-radius:22px;padding:32px 24px;cursor:pointer;position:relative;transition:transform .2s,border-color .2s,box-shadow .2s;
+  border-radius:20px;padding:20px 20px;cursor:pointer;position:relative;transition:transform .2s,border-color .2s,box-shadow .2s;
   display:flex;flex-direction:column;
   animation:stagePulse 4.5s ease-in-out infinite;
 }
@@ -117,13 +145,13 @@ main{padding:0 24px;max-width:none;margin:0 auto;width:100%;flex:1;box-sizing:bo
 .macro-stage:hover{transform:translateY(-8px) scale(1.02);border-color:var(--accent);box-shadow:0 14px 36px rgba(76,154,255,0.3);animation-play-state:paused;z-index:2;}
 .macro-stage.selected{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent);background:linear-gradient(165deg,#1c4468,var(--card));}
 .macro-stage.selected .name{color:var(--accent);}
-.macro-stage .num{font-size:13px;color:var(--text-mute);font-weight:600;margin-bottom:16px;}
-.macro-stage .name{font-size:21px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em;line-height:1.2;}
-.macro-stage .etapa{font-size:11.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:18px;}
-.macro-stage .def{font-size:13.5px;color:var(--text-soft);line-height:1.6;margin-bottom:22px;flex:1 1 auto;}
-.macro-stage .count{font-size:32px;font-weight:700;margin-top:auto;}
-.macro-stage .count-of{font-size:18px;font-weight:500;color:var(--text-mute);}
-.macro-stage .count-label{font-size:12px;color:var(--text-mute);}
+.macro-stage .num{font-size:11px;color:var(--text-mute);font-weight:600;margin-bottom:8px;}
+.macro-stage .name{font-size:17px;font-weight:700;margin-bottom:4px;letter-spacing:-.01em;line-height:1.2;}
+.macro-stage .etapa{font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:10px;}
+.macro-stage .def{font-size:12px;color:var(--text-soft);line-height:1.5;margin-bottom:10px;flex:1 1 auto;}
+.macro-stage .count{font-size:22px;font-weight:700;margin-top:auto;}
+.macro-stage .count-of{font-size:14px;font-weight:500;color:var(--text-mute);}
+.macro-stage .count-label{font-size:10px;color:var(--text-mute);}
 .macro-arrow{display:flex;align-items:center;justify-content:center;color:var(--text-mute);font-size:18px;}
 
 /* wheel mode */
@@ -332,8 +360,9 @@ footer .ver{opacity:.6;}
       <svg width="18" height="18" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
     </button>
     <p class="login-status" id="loginStatus"></p>
+    <div class="login-spinner" id="loginSpinner"></div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v50</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v51</span></div>
 </div>
 
 <div id="app">
@@ -381,7 +410,13 @@ footer .ver{opacity:.6;}
         <h2 class="section-title"><b>Three O</b> — Macro Flow end-to-end</h2>
         <p class="section-sub">Las 6 etapas del ciclo de vida de un proyecto, de la oportunidad al cierre.</p>
       </div>
-      <div class="macro-flow" id="macroFlow"></div>
+      <div class="macro-flow-wrap" id="macroFlowWrap">
+        <div class="macro-flow" id="macroFlow"></div>
+        <div class="macro-transversal" id="macroTransversal">
+          <button class="trans-bar" onclick="goToTransversal('Administración')"><div><div class="tag">Transversal</div><div class="name">Administración</div></div></button>
+          <button class="trans-bar" onclick="goToTransversal('TI / Digitalización')"><div><div class="tag">Transversal</div><div class="name">TI / Digitalización</div></div></button>
+        </div>
+      </div>
       <div class="macro-wheel" id="macroWheel" style="display:none;">
         <div class="wheel-list" id="wheelList"></div>
         <div class="wheel-detail" id="wheelDetail"></div>
@@ -444,7 +479,7 @@ footer .ver{opacity:.6;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v50</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v51</span></footer>
 </div>
 
 <div class="modal-overlay" id="procModalOverlay">
@@ -501,6 +536,7 @@ function persist(){
 
 function cleanPriority(p){ return (p||'').replace("⚠️️","").trim() || "Sin definir"; }
 function priorityClass(p){
+  p = p || "";
   if(p.indexOf("Crítica")>-1) return "crit";
   if(p==="Alta") return "alta";
   if(p==="Media") return "media";
@@ -510,6 +546,7 @@ function priorityClass(p){
 
 function switchView(v){
   document.getElementById('macroModeTabs').style.display = (v==='macro') ? 'flex' : 'none';
+  if(v==='universe'){ renderStageBar(); renderSopsGroupBar(); render(); }
   document.getElementById('view-'+v).scrollIntoView({behavior:'smooth', block:'start'});
 }
 const revealObserver = new IntersectionObserver((entries)=>{
@@ -582,6 +619,7 @@ function toggleMacroMode(){
 }
 let macroMode='row';
 function goToStage(stage){
+  vista2Mode='etapa';
   state.stage = stage;
   etapaSelected = stage;
   renderEtapaTab();
@@ -590,7 +628,46 @@ function goToStage(stage){
 
 /* ---- ETAPA (Vista 2) ---- */
 let etapaSelected = null;
+let vista2Mode = 'etapa';
+let transversalSelected = null;
+const TRANSVERSAL_LINES = ["Administración","TI / Digitalización"];
+const TRANSVERSAL_GROUPS = {
+  "Administración": [
+    {key:"Sage", label:"Sage (Instructivos)", count:6},
+    {key:"RRHH", label:"Recursos Humanos", count:4},
+    {key:"Legal", label:"Legal / Contratos", count:3}
+  ],
+  "TI / Digitalización": [
+    {key:"SmartBuild", label:"SmartBuild", count:8},
+    {key:"PowerBI", label:"Power BI", count:5},
+    {key:"Otros", label:"Otras herramientas", count:2}
+  ]
+};
+let TRANSVERSAL_PROCS = [];
+Object.values(TRANSVERSAL_GROUPS).flat().forEach(g=>{
+  for(let i=1;i<=g.count;i++){
+    TRANSVERSAL_PROCS.push({id:g.key+'-'+i, group:g.key, process:g.label+' — proceso de ejemplo '+i, scope:'Dato de muestra: pendiente de conectar a la pestaña real "Procesos Transversales".', priority:'Sin priorizar'});
+  }
+});
+function goToTransversal(line){
+  vista2Mode='transversal'; transversalSelected=line; groupSelected=null;
+  renderEtapaTab();
+  switchView('etapa');
+}
+function selectTransversal(line){
+  transversalSelected=line; groupSelected=null;
+  document.querySelectorAll('#etapaBar .stage-pill').forEach(el=>el.classList.toggle('active', el.dataset.stage===line));
+  renderGroupGrid(); renderEtapaGrid();
+}
 function renderEtapaTab(){
+  if(vista2Mode==='transversal'){
+    document.getElementById('etapaBar').innerHTML = TRANSVERSAL_LINES.map(l=>
+      `<span class="stage-pill ${transversalSelected===l?'active':''}" data-stage="${l}" onclick="selectTransversal('${l}')">${l}</span>`).join('');
+    groupSelected = null;
+    renderGroupGrid();
+    renderEtapaGrid();
+    return;
+  }
   if(!etapaSelected){ etapaSelected = state.stage || STAGES[0].stage; }
   document.getElementById('etapaBar').innerHTML = STAGES.map(s=>
     `<span class="stage-pill ${etapaSelected===s.stage?'active':''}" data-stage="${s.stage}" onclick="selectEtapa('${s.stage}')">${s.stage}</span>`).join('');
@@ -599,6 +676,7 @@ function renderEtapaTab(){
   renderEtapaGrid();
 }
 function selectEtapa(stage){
+  vista2Mode='etapa';
   etapaSelected = stage; groupSelected = null;
   document.querySelectorAll('#etapaBar .stage-pill').forEach(el=>el.classList.toggle('active', el.dataset.stage===stage));
   renderGroupGrid(); renderEtapaGrid();
@@ -607,6 +685,18 @@ function selectEtapa(stage){
 let groupSelected = null;
 let groupModeIsArea = false;
 function renderGroupGrid(){
+  if(vista2Mode==='transversal'){
+    const tiles = (TRANSVERSAL_GROUPS[transversalSelected]||[]).map(g=>({key:g.key, label:g.label, kicker:'Grupo', count:g.count}));
+    const cells = tiles.map(t=>
+      `<div class="group-tile ${groupSelected===t.key?'active':''}" onclick="selectGroup('${t.key.replace(/'/g,"&apos;")}')">
+        <div class="gt-kicker">${t.kicker}</div>
+        <div class="gt-name">${t.label}</div>
+        <div class="gt-count">${t.count} proceso(s)</div>
+      </div>`);
+    for(let i=cells.length; i<8; i++){ cells.push('<div class="group-tile empty"></div>'); }
+    document.getElementById('groupGrid').innerHTML = cells.join('');
+    return;
+  }
   const stageProcs = PROCS.filter(p=>p.macro===etapaSelected);
   const byGroup = {};
   stageProcs.forEach(p=>{ (byGroup[p.group]=byGroup[p.group]||[]).push(p); });
@@ -631,9 +721,15 @@ function renderGroupGrid(){
 }
 function selectGroup(key){ groupSelected = (groupSelected===key) ? null : key; renderGroupGrid(); renderEtapaGrid(); }
 function renderEtapaGrid(){
-  let list = PROCS.filter(p=>p.macro===etapaSelected);
-  if(groupSelected){
-    list = list.filter(p=> groupModeIsArea ? p.area===groupSelected : p.group===groupSelected);
+  let list;
+  if(vista2Mode==='transversal'){
+    list = TRANSVERSAL_PROCS;
+    if(groupSelected){ list = list.filter(p=>p.group===groupSelected); }
+  } else {
+    list = PROCS.filter(p=>p.macro===etapaSelected);
+    if(groupSelected){
+      list = list.filter(p=> groupModeIsArea ? p.area===groupSelected : p.group===groupSelected);
+    }
   }
   const total = list.length;
   const grid=document.getElementById('etapaGrid');
@@ -718,11 +814,28 @@ function buildChips(){
   markActive();
 }
 function renderStageBar(){
+  if(vista2Mode==='transversal'){
+    document.getElementById('stageBar').innerHTML = TRANSVERSAL_LINES.map(l=>
+      `<span class="stage-pill ${transversalSelected===l?'active':''}" data-stage="${l}" onclick="toggleTransversalSops('${l}')">${l}</span>`).join('');
+    return;
+  }
   document.getElementById('stageBar').innerHTML = STAGES.map(s=>
     `<span class="stage-pill" data-stage="${s.stage}" onclick="toggleStage('${s.stage}')">${s.stage}</span>`).join('');
 }
+function toggleTransversalSops(line){
+  transversalSelected = (transversalSelected===line) ? null : line;
+  state.group = null;
+  renderStageBar(); renderSopsGroupBar(); render();
+}
 function renderSopsGroupBar(){
   const bar = document.getElementById('sopsGroupBar');
+  if(vista2Mode==='transversal'){
+    if(!transversalSelected){ bar.innerHTML = '<span class="sops-pill" style="cursor:default;opacity:.5;">Elige Administración o TI arriba</span>'; return; }
+    const tiles = (TRANSVERSAL_GROUPS[transversalSelected]||[]).map(g=>({key:g.key,label:g.label,count:g.count}));
+    bar.innerHTML = tiles.map(t=>
+      `<span class="sops-pill ${state.group===t.key?'active':''}" onclick="toggleSopsGroup('${t.key.replace(/'/g,"&apos;")}')">${t.label} · ${t.count}</span>`).join('');
+    return;
+  }
   if(!state.stage){ bar.innerHTML = '<span class="sops-pill" style="cursor:default;opacity:.5;">Elige una etapa arriba para ver sus grupos</span>'; return; }
   const stageProcs = PROCS.filter(p=>p.macro===state.stage && (!state.areas.size || state.areas.has(p.area)));
   const byGroup = {};
@@ -742,7 +855,9 @@ function renderSopsGroupBar(){
 function toggleSopsGroup(key){ state.group = (state.group===key) ? null : key; render(); renderSopsGroupBar(); }
 function markActive(){
   document.querySelectorAll('[data-area]').forEach(c=>c.classList.toggle('active', state.areas.has(c.dataset.area)));
-  document.querySelectorAll('[data-stage]').forEach(c=>c.classList.toggle('active', state.stage===c.dataset.stage));
+  if(vista2Mode!=='transversal'){
+    document.querySelectorAll('[data-stage]').forEach(c=>c.classList.toggle('active', state.stage===c.dataset.stage));
+  }
   updateFilterCount();
 }
 function updateFilterCount(){
@@ -767,6 +882,12 @@ document.addEventListener('click', e=>{
 
 function filtered(){
   const q=state.search.toLowerCase();
+  if(vista2Mode==='transversal'){
+    let list = TRANSVERSAL_PROCS;
+    if(state.group){ list = list.filter(p=>p.group===state.group); }
+    if(q){ list = list.filter(p=>[p.id,p.process,p.scope,p.group].join(' ').toLowerCase().indexOf(q)>-1); }
+    return list;
+  }
   return PROCS.filter(p=>{
     if(state.areas.size && !state.areas.has(p.area)) return false;
     if(state.stage && p.macro!==state.stage) return false;
@@ -1079,6 +1200,7 @@ function initApp(){
 async function doLogin(){
   const btn = document.getElementById('loginBtn');
   const status = document.getElementById('loginStatus');
+  const spinner = document.getElementById('loginSpinner');
   btn.disabled = true;
   status.className='login-status';
   status.textContent = 'Iniciando sesión...';
@@ -1087,10 +1209,12 @@ async function doLogin(){
     await inst.initialize();
     await inst.loginPopup({ scopes:["User.Read","Files.Read.All"] });
     status.textContent = 'Cargando datos en vivo desde SharePoint...';
+    spinner.classList.add('on');
     await loadAllData();
     initApp();
   }catch(err){
     console.error(err);
+    spinner.classList.remove('on');
     status.className='login-status err';
     status.textContent = '❌ ' + err.message;
     btn.disabled = false;
