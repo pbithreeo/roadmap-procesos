@@ -362,7 +362,7 @@ footer .ver{opacity:.6;}
     <p class="login-status" id="loginStatus"></p>
     <div class="login-spinner" id="loginSpinner"></div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v51</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v52</span></div>
 </div>
 
 <div id="app">
@@ -413,8 +413,8 @@ footer .ver{opacity:.6;}
       <div class="macro-flow-wrap" id="macroFlowWrap">
         <div class="macro-flow" id="macroFlow"></div>
         <div class="macro-transversal" id="macroTransversal">
-          <button class="trans-bar" onclick="goToTransversal('Administración')"><div><div class="tag">Transversal</div><div class="name">Administración</div></div></button>
-          <button class="trans-bar" onclick="goToTransversal('TI / Digitalización')"><div><div class="tag">Transversal</div><div class="name">TI / Digitalización</div></div></button>
+          <button class="trans-bar" data-stage="Administración" onclick="goToTransversal('Administración')"><div><div class="tag">Transversal</div><div class="name">Administración</div></div></button>
+          <button class="trans-bar" data-stage="TI / Digitalización" onclick="goToTransversal('TI / Digitalización')"><div><div class="tag">Transversal</div><div class="name">TI / Digitalización</div></div></button>
         </div>
       </div>
       <div class="macro-wheel" id="macroWheel" style="display:none;">
@@ -479,7 +479,7 @@ footer .ver{opacity:.6;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v51</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v52</span></footer>
 </div>
 
 <div class="modal-overlay" id="procModalOverlay">
@@ -631,24 +631,8 @@ let etapaSelected = null;
 let vista2Mode = 'etapa';
 let transversalSelected = null;
 const TRANSVERSAL_LINES = ["Administración","TI / Digitalización"];
-const TRANSVERSAL_GROUPS = {
-  "Administración": [
-    {key:"Sage", label:"Sage (Instructivos)", count:6},
-    {key:"RRHH", label:"Recursos Humanos", count:4},
-    {key:"Legal", label:"Legal / Contratos", count:3}
-  ],
-  "TI / Digitalización": [
-    {key:"SmartBuild", label:"SmartBuild", count:8},
-    {key:"PowerBI", label:"Power BI", count:5},
-    {key:"Otros", label:"Otras herramientas", count:2}
-  ]
-};
+let TRANSVERSAL_GROUPS = {};
 let TRANSVERSAL_PROCS = [];
-Object.values(TRANSVERSAL_GROUPS).flat().forEach(g=>{
-  for(let i=1;i<=g.count;i++){
-    TRANSVERSAL_PROCS.push({id:g.key+'-'+i, group:g.key, process:g.label+' — proceso de ejemplo '+i, scope:'Dato de muestra: pendiente de conectar a la pestaña real "Procesos Transversales".', priority:'Sin priorizar'});
-  }
-});
 function goToTransversal(line){
   vista2Mode='transversal'; transversalSelected=line; groupSelected=null;
   renderEtapaTab();
@@ -1114,15 +1098,15 @@ function parseCatalogoEtapas(values){
   return out.sort((a,b)=>a.order-b.order);
 }
 function parseFiguras(values){
-  const stageCols = ["Estimados","Adjudicación","Notice to Proceed","Movilización","Ejecución Proyecto","Cierre"];
-  const h = findHeaderRow(values, ["Nombre","Tipo"].concat(stageCols));
+  const stageCols = ["Estimados","Adjudicación","Notice to Proceed","Movilización","Ejecución Proyecto","Cierre","Administración","TI / Digitalización"];
+  const h = findHeaderRow(values, ["Nombre","Tipo","Estimados","Cierre"]);
   if(!h) return [];
   const out = [];
   for(let r=h.rowIndex+1; r<values.length; r++){
     const row = values[r]||[];
     const name = cellStr(row, h.map["Nombre"]);
     if(!name) continue;
-    const stages = stageCols.filter(s => cellStr(row, h.map[s]).toUpperCase()==='X');
+    const stages = stageCols.filter(s => h.map[s]!==undefined && cellStr(row, h.map[s]).toUpperCase()==='X');
     out.push({ name, tipo: cellStr(row,h.map["Tipo"]), stages,
       resp: cellStr(row,h.map["Responsabilidad"]), areas: cellStr(row,h.map["Areas"]), nota: cellStr(row,h.map["Nota"]) });
   }
@@ -1172,7 +1156,7 @@ function parseDocumentosPorProceso(values){
 
 async function loadAllData(){
   const token = await getGraphToken();
-  const sheetNames = ["Procesos E2E","Catalogo de Etapas","Figuras","Matriz Figuras x Proceso","Catalogo Tipos Documentales","Documentos por Proceso"];
+  const sheetNames = ["Procesos E2E","Procesos Transversales","Catalogo de Etapas","Figuras","Matriz Figuras x Proceso","Catalogo Tipos Documentales","Documentos por Proceso","Documentos Transversales"];
   const results = {};
   for(const name of sheetNames){
     results[name] = await fetchSheetValues(token, name);
@@ -1186,8 +1170,37 @@ async function loadAllData(){
   FIGURA_MATRIX = parseMatrizFiguras(results["Matriz Figuras x Proceso"]);
   const liveDocTypes = parseCatalogoTipos(results["Catalogo Tipos Documentales"]);
   const liveDocConfig = parseDocumentosPorProceso(results["Documentos por Proceso"]);
+  const liveDocConfigTrans = parseDocumentosPorProceso(results["Documentos Transversales"]);
   DOC_TYPES = JSON.parse(localStorage.getItem('o_doctypes')||'null') || liveDocTypes;
-  DOC_CONFIG = JSON.parse(localStorage.getItem('o_docconfig')||'null') || liveDocConfig;
+  DOC_CONFIG = JSON.parse(localStorage.getItem('o_docconfig')||'null') || Object.assign({}, liveDocConfig, liveDocConfigTrans);
+
+  const allTrans = parseProcesosTransversales(results["Procesos Transversales"]);
+  TRANSVERSAL_PROCS = allTrans.filter(p=>!p.oculto);
+  TRANSVERSAL_GROUPS = {};
+  TRANSVERSAL_LINES.forEach(l=>{ TRANSVERSAL_GROUPS[l] = []; });
+  TRANSVERSAL_PROCS.forEach(p=>{
+    if(!TRANSVERSAL_GROUPS[p.linea]) TRANSVERSAL_GROUPS[p.linea] = [];
+    let g = TRANSVERSAL_GROUPS[p.linea].find(x=>x.key===p.group);
+    if(!g){ g = {key:p.group, label:p.group, count:0}; TRANSVERSAL_GROUPS[p.linea].push(g); }
+    g.count++;
+  });
+}
+function parseProcesosTransversales(values){
+  const h = findHeaderRow(values, ["ID","Línea","Grupo","Proceso"]);
+  if(!h) return [];
+  const out = [];
+  for(let r=h.rowIndex+1; r<values.length; r++){
+    const row = values[r]||[];
+    const id = cellStr(row, h.map["ID"]);
+    if(!id) continue;
+    out.push({
+      id, linea: cellStr(row,h.map["Línea"]), group: cellStr(row,h.map["Grupo"]), process: cellStr(row,h.map["Proceso"]),
+      priority: cellStr(row,h.map["Prioridad"]) || 'Sin priorizar', scope: cellStr(row,h.map["Descripcion"]),
+      tools: cellStr(row,h.map["Herramientas"]), owner: cellStr(row,h.map["Owner"]),
+      oculto: cellStr(row,h.map["Ocultar"]).toUpperCase()==='X'
+    });
+  }
+  return out;
 }
 
 function initApp(){
