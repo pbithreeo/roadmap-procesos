@@ -401,6 +401,15 @@ footer .ver{opacity:.6;}
 
   .view{height:auto;min-height:calc(100vh - var(--header-h));overflow:visible;padding-top:16px;padding-bottom:24px;}
   .macro-top,.macro-flow-wrap,.macro-low{flex:none;}
+
+  #view-etapa .section-sub,#view-universe .section-sub{display:none;}
+  .etapa-top,.etapa-content{flex:none;}
+  #etapaBar{overflow-x:auto;flex-wrap:nowrap;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
+  #etapaBar .stage-pill{flex:0 0 auto;scroll-snap-align:center;}
+  .group-grid{display:grid;grid-auto-flow:row;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(58px,auto);overflow:visible;gap:8px;padding-bottom:0;}
+  .group-tile{padding:10px 12px;border-radius:14px;}
+  .proc-grid{display:flex;grid-template-columns:none;overflow-x:auto;gap:10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-top:12px;}
+  .proc-card{flex:0 0 230px;scroll-snap-align:start;}
 }
 @media (max-width:720px){ header.top{backdrop-filter:none;background:#0a1826;} }
 </style>
@@ -419,7 +428,7 @@ footer .ver{opacity:.6;}
     <p class="login-status" id="loginStatus"></p>
     <div class="login-spinner" id="loginSpinner"></div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v55</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v56</span></div>
 </div>
 
 <div id="app">
@@ -540,7 +549,7 @@ footer .ver{opacity:.6;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v55</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v56</span></footer>
 </div>
 
 <div class="modal-overlay" id="procModalOverlay">
@@ -715,6 +724,7 @@ function selectTransversal(line){
   transversalSelected=line; groupSelected=null;
   document.querySelectorAll('#etapaBar .stage-pill').forEach(el=>el.classList.toggle('active', el.dataset.stage===line));
   renderGroupGrid(); renderEtapaGrid();
+  centerActivePill();
 }
 function renderEtapaTab(){
   if(vista2Mode==='transversal'){
@@ -723,6 +733,7 @@ function renderEtapaTab(){
     groupSelected = null;
     renderGroupGrid();
     renderEtapaGrid();
+    centerActivePill();
     return;
   }
   if(!etapaSelected){ etapaSelected = state.stage || STAGES[0].stage; }
@@ -731,12 +742,22 @@ function renderEtapaTab(){
   groupSelected = null;
   renderGroupGrid();
   renderEtapaGrid();
+  centerActivePill();
+}
+function centerActivePill(){
+  if(!isMobileWidth()) return;
+  const bar = document.getElementById('etapaBar');
+  const active = bar.querySelector('.stage-pill.active');
+  if(!active) return;
+  const target = active.offsetLeft + active.offsetWidth/2 - bar.clientWidth/2;
+  bar.scrollTo({left: Math.max(0, target), behavior:'smooth'});
 }
 function selectEtapa(stage){
   vista2Mode='etapa';
   etapaSelected = stage; groupSelected = null;
   document.querySelectorAll('#etapaBar .stage-pill').forEach(el=>el.classList.toggle('active', el.dataset.stage===stage));
   renderGroupGrid(); renderEtapaGrid();
+  centerActivePill();
 }
 
 let groupSelected = null;
