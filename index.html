@@ -399,19 +399,111 @@ footer .ver{opacity:.6;}
   .trans-bar .tag{font-size:8px;}
   .trans-bar .name{font-size:11px;}
 
-  .view{height:auto;min-height:calc(100vh - var(--header-h));overflow:visible;padding-top:16px;padding-bottom:24px;}
-  .macro-top,.macro-flow-wrap,.macro-low{flex:none;}
+  .view{height:auto;overflow:visible;}
+  .macro-top{flex:none;}
 
   #view-etapa .section-sub,#view-universe .section-sub{display:none;}
-  .etapa-top,.etapa-content{flex:none;}
-  #etapaBar{overflow-x:auto;flex-wrap:nowrap;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
-  #etapaBar .stage-pill{flex:0 0 auto;scroll-snap-align:center;}
+  .etapa-top{flex:none;}
   .group-grid{display:grid;grid-auto-flow:row;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(58px,auto);overflow:visible;gap:8px;padding-bottom:0;}
   .group-tile{padding:10px 12px;border-radius:14px;}
-  .proc-grid{display:flex;grid-template-columns:none;overflow-x:auto;gap:10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-top:12px;}
-  .proc-card{flex:0 0 230px;scroll-snap-align:start;}
 }
 @media (max-width:720px){ header.top{backdrop-filter:none;background:#0a1826;} }
+
+/* ================= v57 · MÓVIL (debe ir al final de la hoja) ================= */
+.hscroll-track{display:none;}
+@media (max-width:720px){
+  main{padding:0 14px;overflow-x:clip;}
+
+  /* --- altura común de las 3 vistas + títulos alineados (referencia: Vista 2) --- */
+  .view{min-height:calc(100vh - var(--header-h));min-height:calc(100svh - var(--header-h));}
+  #view-macro,#view-etapa,#view-universe{display:flex;flex-direction:column;justify-content:flex-start;padding-top:22px;padding-bottom:12px;}
+  .section-eyebrow{font-size:11px;margin-bottom:4px;}
+  .section-title{font-size:24px;line-height:1.15;margin:0 0 12px;}
+  .view{border-top:none;}
+
+  /* --- Vista 1: las etapas se reparten toda la altura disponible --- */
+  #view-macro .macro-top{flex:none;display:block;margin-bottom:2px;}
+  #view-macro .macro-flow-wrap{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
+  #view-macro .macro-flow{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:0;}
+  #view-macro .macro-stage{flex:1 1 0;min-height:60px;max-height:100px;margin-bottom:8px;padding-top:8px;padding-bottom:8px;}
+  #view-macro .macro-stage:last-of-type{margin-bottom:0;}
+  #view-macro .macro-stage .num{font-size:10px;}
+  #view-macro .macro-stage .name{font-size:15.5px;}
+  #view-macro .macro-stage .count{font-size:19px;}
+  #view-macro .macro-transversal{flex:0 0 auto;}
+  #view-macro .trans-bar{padding:12px 14px;}
+  #view-macro .trans-bar .tag{font-size:9px;}
+  #view-macro .trans-bar .name{font-size:12.5px;}
+
+  /* --- barra de navegación: grid 1x2 al fondo de cada vista --- */
+  #view-macro .macro-low,#view-etapa .macro-low,#view-universe .macro-low{
+    flex:0 0 auto;margin-top:auto;padding:12px 0 0;border-top:none;
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch;}
+  .macro-low span{display:none;}
+  .macro-low .low-link{
+    height:46px;width:100%;display:flex;align-items:center;justify-content:center;white-space:nowrap;
+    background:rgba(255,255,255,0.05);border:1px solid var(--line-strong);border-radius:14px;
+    color:var(--text);font-size:13.5px;font-weight:600;}
+  .macro-low .low-link:active{background:rgba(76,154,255,0.16);border-color:var(--accent);}
+  .macro-low .low-link.prev{grid-column:1;}
+  .macro-low .low-link.next{grid-column:2;}
+
+  /* --- barras horizontales (etapas / grupos) con scroll mejorado --- */
+  #etapaBar,#stageBar,#sopsGroupBar{
+    display:flex;flex-wrap:nowrap;gap:8px;margin:8px 0 0;padding:2px 0 4px;
+    overflow-x:auto;overflow-y:hidden;min-width:0;max-width:100%;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+    scrollbar-width:none;-ms-overflow-style:none;}
+  #etapaBar::-webkit-scrollbar,#stageBar::-webkit-scrollbar,#sopsGroupBar::-webkit-scrollbar{display:none;}
+  #etapaBar .stage-pill,#stageBar .stage-pill{flex:0 0 auto;justify-content:center;height:38px;padding:0 16px;font-size:13px;scroll-snap-align:center;}
+  #sopsGroupBar .sops-pill{height:34px;scroll-snap-align:center;}
+  .hbar.fade-r{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);}
+  .hbar.fade-l{-webkit-mask-image:linear-gradient(to left,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to left,#000 calc(100% - 28px),transparent);}
+  .hbar.fade-l.fade-r{-webkit-mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,transparent,#000 28px,#000 calc(100% - 28px),transparent);}
+  .hscroll-track{display:block;position:relative;height:3px;margin:3px 2px 6px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden;flex:0 0 auto;}
+  .hscroll-track span{position:absolute;top:0;bottom:0;left:0;width:30%;border-radius:3px;background:var(--accent);opacity:.9;}
+  .hscroll-track.idle{visibility:hidden;}
+
+  /* --- contenido de Vistas 2 y 3 ocupa la altura restante --- */
+  #view-etapa .etapa-content,#view-universe .etapa-content{flex:1 1 auto;min-height:0;justify-content:flex-start;gap:10px;padding-top:4px;margin-bottom:12px;}
+  .group-tile.empty,.proc-card.empty{display:none;}
+  .etapa-grid-more{display:none;}
+  .group-grid{grid-template-columns:1fr 1fr;}
+  .group-tile{display:grid;grid-template-columns:1fr auto;align-content:center;column-gap:8px;row-gap:3px;padding:9px 12px;}
+  .group-tile .gt-kicker{grid-column:1;grid-row:1;margin:0;font-size:10px;}
+  .group-tile .gt-count{grid-column:2;grid-row:1;margin:0;font-size:10.5px;text-align:right;white-space:nowrap;}
+  .group-tile .gt-name{grid-column:1 / -1;grid-row:2;font-size:13.5px;margin:0;line-height:1.25;}
+  .group-grid{grid-auto-rows:minmax(50px,auto);}
+
+  /* --- Vista 3: buscador + filtros --- */
+  .controls-row{height:auto;flex-wrap:nowrap;gap:8px;margin:0;}
+  #search{min-width:0;height:44px;font-size:16px;}
+  .filters-toggle{height:44px;padding:0 12px;}
+  #filtersPopup{width:min(340px,calc(100vw - 28px));}
+  .result-count{margin:0;font-size:12px;}
+
+  /* --- grids de procesos: 2 columnas x N filas (según altura), páginas con swipe --- */
+  #etapaGrid,#procGrid{
+    display:grid;grid-auto-flow:column;grid-template-columns:none;
+    grid-template-rows:repeat(var(--rows,2),var(--row-h,120px));
+    grid-auto-columns:calc((100% - 10px)/2);
+    gap:10px;margin:0;padding:0;
+    overflow-x:auto;overflow-y:hidden;
+    flex:1 1 0;min-height:250px;
+    align-content:start;
+    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+    scrollbar-width:none;-ms-overflow-style:none;}
+  #etapaGrid::-webkit-scrollbar,#procGrid::-webkit-scrollbar{display:none;}
+  #etapaGrid .proc-card,#procGrid .proc-card{
+    min-width:0;height:100%;padding:10px 12px;border-radius:14px;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:flex-start;flex:none;}
+  .proc-top{margin-bottom:6px;gap:4px;flex-wrap:nowrap;}
+  .proc-id{font-size:9.5px;padding:2px 6px;white-space:nowrap;}
+  .badge{font-size:8.5px;padding:2px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+  #etapaGrid .proc-title,#procGrid .proc-title{font-size:12.5px;margin-bottom:4px;}
+  #etapaGrid .proc-scope,#procGrid .proc-scope{font-size:11px;}
+  #procGrid .empty-state,#etapaGrid .empty-state{grid-column:1 / span 2;grid-row:1 / span 2;padding:36px 12px;}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.7.0/lib/msal-browser.min.js" onerror="document.getElementById('loginStatus').innerHTML='<span style=color:#ff6a5f>❌ La librería de login no cargó (red/firewall/extensión). Avisa a soporte.</span>'"></script>
 </head>
@@ -428,7 +520,7 @@ footer .ver{opacity:.6;}
     <p class="login-status" id="loginStatus"></p>
     <div class="login-spinner" id="loginSpinner"></div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v56</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v57</span></div>
 </div>
 
 <div id="app">
@@ -477,7 +569,7 @@ footer .ver{opacity:.6;}
     <div class="view active" id="view-macro">
       <div class="macro-top">
         <p class="section-eyebrow">Vista 1 · El mapa</p>
-        <h2 class="section-title"><b>Three O</b> — Macro Flow end-to-end</h2>
+        <h2 class="section-title"><b>Three O</b> — Macro Flow <span style="white-space:nowrap">end-to-end</span></h2>
         <p class="section-sub">Las 6 etapas del ciclo de vida de un proyecto, de la oportunidad al cierre.</p>
       </div>
       <div class="macro-flow-wrap" id="macroFlowWrap">
@@ -493,7 +585,7 @@ footer .ver{opacity:.6;}
       </div>
       <div class="macro-low">
         <span>¿Listo para bajar de nivel?</span>
-        <button class="low-link" onclick="switchView('etapa')">Ver por Grupo &#8594;</button>
+        <button class="low-link next" onclick="switchView('etapa')">Ver por Grupo &#8594;</button>
       </div>
     </div>
 
@@ -502,17 +594,19 @@ footer .ver{opacity:.6;}
         <p class="section-eyebrow">Vista 2 · El grupo</p>
         <h2 class="section-title">Grupos dentro de cada etapa</h2>
         <p class="section-sub">Elige una etapa y navega sus grupos — en las etapas más densas, separamos por área para no perder el hilo.</p>
-        <div id="etapaBar"></div>
+        <div id="etapaBar" class="hbar"></div>
+        <div class="hscroll-track" data-for="etapaBar"><span></span></div>
       </div>
       <div class="etapa-content">
         <div class="group-grid" id="groupGrid"></div>
         <div class="proc-grid" id="etapaGrid"></div>
+        <div class="hscroll-track" data-for="etapaGrid"><span></span></div>
         <div class="etapa-grid-more" id="etapaGridMore"></div>
       </div>
       <div class="macro-low">
         <span>¿Buscas algo más específico o más general?</span>
-        <button class="low-link" onclick="switchView('macro')">&#8592; Volver a Etapa</button>
-        <button class="low-link" onclick="switchView('universe')">Ver el catálogo SOPs &#8594;</button>
+        <button class="low-link prev" onclick="switchView('macro')">&#8592; Volver a Etapa</button>
+        <button class="low-link next" onclick="switchView('universe')">Ver el catálogo SOPs &#8594;</button>
       </div>
     </div>
 
@@ -521,8 +615,10 @@ footer .ver{opacity:.6;}
         <p class="section-eyebrow">Vista 3 · El catálogo</p>
         <h2 class="section-title">SOPs</h2>
         <p class="section-sub">El mismo camino de arriba funciona aquí como filtro. Haz clic en un proceso para ver su ficha completa.</p>
-        <div id="stageBar"></div>
-        <div id="sopsGroupBar"></div>
+        <div id="stageBar" class="hbar"></div>
+        <div class="hscroll-track" data-for="stageBar"><span></span></div>
+        <div id="sopsGroupBar" class="hbar"></div>
+        <div class="hscroll-track" data-for="sopsGroupBar"><span></span></div>
       </div>
 
       <div class="etapa-content" style="justify-content:flex-start;">
@@ -541,15 +637,16 @@ footer .ver{opacity:.6;}
         </div>
         <div class="result-count" id="resultCount"></div>
         <div class="sops-grid" id="procGrid"></div>
+        <div class="hscroll-track" data-for="procGrid"><span></span></div>
       </div>
       <div class="macro-low">
         <span>¿Necesitas ver el panorama completo?</span>
-        <button class="low-link" onclick="switchView('etapa')">&#8592; Ver por Grupo</button>
+        <button class="low-link prev" onclick="switchView('etapa')">&#8592; Ver por Grupo</button>
       </div>
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v56</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v57</span></footer>
 </div>
 
 <div class="modal-overlay" id="procModalOverlay">
@@ -616,7 +713,7 @@ function priorityClass(p){
 
 function switchView(v){
   document.getElementById('macroModeTabs').style.display = (v==='macro') ? 'flex' : 'none';
-  if(v==='universe'){ renderStageBar(); renderSopsGroupBar(); render(); }
+  if(v==='universe'){ renderStageBar(); renderSopsGroupBar(); render(); setTimeout(()=>{centerActivePill('stageBar');centerActivePill('sopsGroupBar');},60); }
   document.getElementById('view-'+v).scrollIntoView({behavior:'smooth', block:'start'});
   document.getElementById('mainTabs').classList.remove('open');
   document.getElementById('hamburgerBtn').classList.remove('open');
@@ -744,12 +841,14 @@ function renderEtapaTab(){
   renderEtapaGrid();
   centerActivePill();
 }
-function centerActivePill(){
+function centerActivePill(barId){
   if(!isMobileWidth()) return;
-  const bar = document.getElementById('etapaBar');
-  const active = bar.querySelector('.stage-pill.active');
+  const bar = document.getElementById(barId || 'etapaBar');
+  if(!bar) return;
+  const active = bar.querySelector('.stage-pill.active, .sops-pill.active');
   if(!active) return;
-  const target = active.offsetLeft + active.offsetWidth/2 - bar.clientWidth/2;
+  const b = bar.getBoundingClientRect(), a = active.getBoundingClientRect();
+  const target = bar.scrollLeft + (a.left - b.left) + a.width/2 - bar.clientWidth/2;
   bar.scrollTo({left: Math.max(0, target), behavior:'smooth'});
 }
 function selectEtapa(stage){
@@ -763,6 +862,7 @@ function selectEtapa(stage){
 let groupSelected = null;
 let groupModeIsArea = false;
 function renderGroupGrid(){
+  fitGridsSoon();
   if(vista2Mode==='transversal'){
     const tiles = (TRANSVERSAL_GROUPS[transversalSelected]||[]).map(g=>({key:g.key, label:g.label, kicker:'Grupo', count:g.count}));
     const cells = tiles.map(t=>
@@ -799,6 +899,7 @@ function renderGroupGrid(){
 }
 function selectGroup(key){ groupSelected = (groupSelected===key) ? null : key; renderGroupGrid(); renderEtapaGrid(); }
 function renderEtapaGrid(){
+  fitGridsSoon();
   let list;
   if(vista2Mode==='transversal'){
     list = TRANSVERSAL_PROCS;
@@ -903,7 +1004,7 @@ function renderStageBar(){
 function toggleTransversalSops(line){
   transversalSelected = (transversalSelected===line) ? null : line;
   state.group = null;
-  renderStageBar(); renderSopsGroupBar(); render();
+  renderStageBar(); renderSopsGroupBar(); render(); centerActivePill('stageBar');
 }
 function renderSopsGroupBar(){
   const bar = document.getElementById('sopsGroupBar');
@@ -930,11 +1031,11 @@ function renderSopsGroupBar(){
   bar.innerHTML = tiles.map(t=>
     `<span class="sops-pill ${state.group===t.key?'active':''}" onclick="toggleSopsGroup('${t.key.replace(/'/g,"&apos;")}')">${t.label} · ${t.count}</span>`).join('');
 }
-function toggleSopsGroup(key){ state.group = (state.group===key) ? null : key; render(); renderSopsGroupBar(); }
+function toggleSopsGroup(key){ state.group = (state.group===key) ? null : key; render(); renderSopsGroupBar(); centerActivePill('sopsGroupBar'); }
 function markActive(){
   document.querySelectorAll('[data-area]').forEach(c=>c.classList.toggle('active', state.areas.has(c.dataset.area)));
   if(vista2Mode!=='transversal'){
-    document.querySelectorAll('[data-stage]').forEach(c=>c.classList.toggle('active', state.stage===c.dataset.stage));
+    document.querySelectorAll('#stageBar [data-stage]').forEach(c=>c.classList.toggle('active', state.stage===c.dataset.stage));
   }
   updateFilterCount();
 }
@@ -944,7 +1045,7 @@ function updateFilterCount(){
   else{ badge.style.display='none'; }
 }
 function toggleArea(a){ state.areas.has(a)?state.areas.delete(a):state.areas.add(a); renderSopsGroupBar(); render(); }
-function toggleStage(s){ state.stage=(state.stage===s)?null:s; state.group=null; renderSopsGroupBar(); render(); }
+function toggleStage(s){ state.stage=(state.stage===s)?null:s; state.group=null; renderSopsGroupBar(); render(); centerActivePill('stageBar'); }
 function clearFilters(){ state.search=""; state.areas.clear(); state.stage=null; state.group=null; document.getElementById('search').value=""; renderSopsGroupBar(); render(); }
 function toggleFiltersPopup(){
   const p=document.getElementById('filtersPopup'); const b=document.getElementById('filtersToggle');
@@ -975,6 +1076,7 @@ function filtered(){
   });
 }
 function render(){
+  fitGridsSoon();
   markActive();
   const list=filtered();
   document.getElementById('resultCount').textContent = list.length + ' proceso(s) encontrados';
@@ -1302,12 +1404,70 @@ function parseProcesosTransversales(values){
   return out;
 }
 
+
+/* ---- MÓVIL: filas de los grids según altura + indicador de scroll ---- */
+const HSCROLL_IDS = ['etapaBar','stageBar','sopsGroupBar','etapaGrid','procGrid'];
+const GRID_IDS = ['etapaGrid','procGrid'];
+let _fitRaf = 0;
+function fitGridsSoon(){ cancelAnimationFrame(_fitRaf); _fitRaf = requestAnimationFrame(fitGrids); }
+function fitGrids(){
+  GRID_IDS.forEach(id=>{
+    const g = document.getElementById(id); if(!g) return;
+    const cards = [...g.querySelectorAll('.proc-card:not(.empty)')];
+    if(!isMobileWidth()){
+      g.style.removeProperty('--rows'); g.style.removeProperty('--row-h');
+      cards.forEach(c=>c.style.removeProperty('scroll-snap-align'));
+      return;
+    }
+    const H = g.clientHeight; if(!H) return;
+    const gap = 10, minCardH = 118;
+    const rows = Math.max(2, Math.floor((H + gap) / (minCardH + gap)));
+    const rowH = Math.floor((H - gap*(rows-1)) / rows);
+    g.style.setProperty('--rows', rows);
+    g.style.setProperty('--row-h', rowH + 'px');
+    cards.forEach((c,i)=>{ c.style.scrollSnapAlign = (i % (rows*2) === 0) ? 'start' : 'none'; });
+    updateHScroll(id);
+  });
+}
+function updateHScroll(id){
+  const el = document.getElementById(id); if(!el) return;
+  const max = el.scrollWidth - el.clientWidth;
+  const tr = document.querySelector('.hscroll-track[data-for="'+id+'"]');
+  if(tr){
+    if(max <= 2){ tr.classList.add('idle'); }
+    else {
+      tr.classList.remove('idle');
+      const w = Math.max(0.15, el.clientWidth / el.scrollWidth);
+      const th = tr.firstElementChild;
+      th.style.width = (w*100) + '%';
+      th.style.left = ((el.scrollLeft / max) * (1 - w) * 100) + '%';
+    }
+  }
+  if(el.classList.contains('hbar')){
+    el.classList.toggle('fade-l', max > 2 && el.scrollLeft > 4);
+    el.classList.toggle('fade-r', max > 2 && el.scrollLeft < max - 4);
+  }
+}
+let _hscrollReady = false;
+function initHScroll(){
+  if(_hscrollReady) return; _hscrollReady = true;
+  HSCROLL_IDS.forEach(id=>{
+    const el = document.getElementById(id); if(!el) return;
+    el.addEventListener('scroll', ()=>updateHScroll(id), {passive:true});
+    new MutationObserver(()=>requestAnimationFrame(()=>updateHScroll(id))).observe(el, {childList:true});
+    if(window.ResizeObserver) new ResizeObserver(()=>{ updateHScroll(id); if(GRID_IDS.includes(id)) fitGridsSoon(); }).observe(el);
+  });
+  window.addEventListener('resize', ()=>{ HSCROLL_IDS.forEach(updateHScroll); fitGridsSoon(); });
+  window.addEventListener('orientationchange', ()=>setTimeout(()=>{ HSCROLL_IDS.forEach(updateHScroll); fitGridsSoon(); }, 250));
+}
+
 function initApp(){
   wheelSelected = STAGES[0] ? STAGES[0].stage : null;
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='flex';
   renderMacro(); buildChips(); renderEtapaTab(); render();
   relocateFabForMobile();
+  initHScroll(); fitGridsSoon();
 }
 function relocateFabForMobile(){
   const fab = document.getElementById('figuraFabWrap');
