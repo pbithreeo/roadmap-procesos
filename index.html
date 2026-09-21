@@ -54,52 +54,6 @@ html,body{height:100%;}
 .hamburger-btn.open .bar:nth-child(2){opacity:0;}
 .hamburger-btn.open .bar:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 .tools-gear{display:none;width:36px;height:36px;border-radius:10px;background:#153a5c;border:1px solid rgba(255,255,255,0.14);color:var(--text-soft);align-items:center;justify-content:center;cursor:pointer;font-size:17px;flex-shrink:0;}
-@media (max-width:720px){
-  :root{--header-h:58px;}
-  #login-screen{padding:20px;}
-  .login-card{width:100%;max-width:380px;padding:26px 22px;border-radius:20px;}
-  .login-logo-img{height:40px;width:40px;margin-bottom:12px;}
-  .login-title{font-size:19px;margin-bottom:6px;}
-  .login-sub{font-size:12.5px;margin-bottom:18px;}
-  .login-btn{padding:12px;font-size:13px;}
-  .login-status{margin-top:12px;min-height:14px;font-size:11.5px;}
-  .login-spinner{margin-top:10px;--size:1.7px;}
-  .login-footer{flex-direction:column;height:auto;padding:10px 16px;gap:2px;text-align:center;line-height:1.5;}
-
-  header.top{padding:0 14px;}
-  .brand{gap:10px;}
-  .brand-logo{width:30px;height:30px;}
-  .hamburger-btn{display:flex;}
-  .tabs{display:none;position:fixed;top:var(--header-h);left:0;width:100%;flex-direction:column;background:var(--card2);border-bottom:1px solid var(--line-strong);z-index:90;padding:8px;gap:4px;box-shadow:0 14px 30px rgba(0,0,0,0.4);}
-  .tabs.open{display:flex;}
-  .tab-btn{width:100%;text-align:left;padding:12px 14px;}
-  #macroModeTabs{display:none!important;}
-  .tools-gear{display:flex;}
-  #toolsDock{display:none;position:fixed;top:var(--header-h);right:12px;background:var(--card2);border:1px solid var(--line-strong);border-radius:14px;padding:8px;flex-direction:column;gap:8px;z-index:90;box-shadow:0 14px 30px rgba(0,0,0,0.4);}
-  #toolsDock.open{display:flex;}
-  #headerRight{margin-right:52px;}
-  #figuraFabWrap{top:calc((var(--header-h) - 38px)/2);right:14px;}
-  #figuraFab{width:38px;height:38px;}
-
-  #view-macro .section-sub{display:none;}
-  .macro-flow{display:flex;flex-direction:column;gap:0;}
-  .macro-arrow{display:none;}
-  .macro-flow::after{content:none;}
-  .macro-stage{position:relative;flex-direction:row;align-items:center;padding:12px 44px 12px 14px;min-height:0;margin-bottom:9px;border-radius:12px;}
-  .macro-stage:not(:first-child)::before{content:'';position:absolute;top:-9px;left:50%;width:1px;height:8px;background:rgba(255,255,255,0.25);}
-  .macro-stage .etapa,.macro-stage .def,.macro-stage .count-label{display:none;}
-  .macro-stage .num{font-size:9px;margin-bottom:2px;}
-  .macro-stage .name{font-size:13px;margin-bottom:0;}
-  .macro-stage .count{position:absolute;top:50%;right:14px;transform:translateY(-50%);font-size:16px;margin-top:0;}
-  .macro-stage .count-of{font-size:11px;}
-  .macro-flow-wrap{gap:10px;}
-  .macro-transversal{flex-direction:row;gap:8px;}
-  .trans-bar{padding:10px;}
-  .trans-bar .name{font-size:11.5px;}
-
-  .view{height:auto;min-height:calc(100vh - var(--header-h));overflow:visible;padding-top:16px;padding-bottom:24px;}
-  .macro-top,.macro-flow-wrap,.macro-low{flex:none;}
-}
 .login-status{font-size:12.5px;color:var(--text-mute);margin-top:18px;line-height:1.6;min-height:18px;}
 .login-status.err{color:var(--red);}
 .login-spinner{display:none;margin:14px auto 0;--color-1:var(--accent);--color-2:#8fd3ff;--size:2.2px;
@@ -126,7 +80,6 @@ header.top{
   padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
   border-bottom:1px solid var(--line);
 }
-@media (max-width:720px){ header.top{backdrop-filter:none;background:#0a1826;} }
 .brand{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
 .login-logo.small .dot{width:20px;height:20px;border-width:2.5px;}
 .brand-logo{height:38px;width:38px;object-fit:contain;display:block;}
@@ -400,6 +353,56 @@ main{padding:0 24px;max-width:none;margin:0 auto;width:100%;flex:1;box-sizing:bo
 footer{height:40px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:10px;font-size:11.5px;color:var(--text-mute);}
 .login-footer{position:fixed;left:0;bottom:0;width:100%;height:40px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:11.5px;color:var(--text-mute);border-top:1px solid var(--line);z-index:50;}
 footer .ver{opacity:.6;}
+@media (max-width:720px){
+  :root{--header-h:58px;}
+  #login-screen{padding:20px;}
+  .login-card{width:100%;max-width:380px;padding:26px 22px;border-radius:20px;}
+  .login-logo-img{height:40px;width:40px;margin-bottom:12px;}
+  .login-title{font-size:19px;margin-bottom:6px;}
+  .login-sub{font-size:12.5px;margin-bottom:18px;}
+  .login-btn{padding:12px;font-size:13px;}
+  .login-status{margin-top:12px;min-height:14px;font-size:11.5px;}
+  .login-spinner{margin-top:10px;--size:1.7px;}
+  .login-footer{flex-direction:column;height:auto;padding:10px 16px;gap:2px;text-align:center;line-height:1.5;}
+
+  header.top{padding:0 14px;}
+  .brand{gap:10px;}
+  .brand-logo{width:30px;height:30px;}
+  .hamburger-btn{display:flex;}
+  .tabs{display:none;position:fixed;top:var(--header-h);left:0;width:100%;flex-direction:column;background:var(--card2);border-bottom:1px solid var(--line-strong);z-index:90;padding:8px;gap:4px;box-shadow:0 14px 30px rgba(0,0,0,0.4);}
+  .tabs.open{display:flex;}
+  .tab-btn{width:100%;text-align:left;padding:12px 14px;}
+  #macroModeTabs{display:none!important;}
+  .tools-gear{display:flex;}
+  #toolsDock{display:none;position:fixed;top:var(--header-h);right:12px;background:var(--card2);border:1px solid var(--line-strong);border-radius:14px;padding:8px;flex-direction:column;gap:8px;z-index:90;box-shadow:0 14px 30px rgba(0,0,0,0.4);}
+  #toolsDock.open{display:flex;}
+  #headerRight #figuraFabWrap{position:relative;top:0;right:0;}
+  #figuraFab{width:38px;height:38px;}
+
+  #view-macro .section-sub{display:none;}
+  .macro-flow{display:flex;flex-direction:column;gap:0;}
+  .macro-arrow{display:none;}
+  .macro-stage{
+    position:relative;flex-direction:column;align-items:flex-start;justify-content:center;
+    text-align:left;padding:14px 54px 14px 18px;min-height:0;margin-bottom:8px;
+    border-radius:20px;background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--line-strong);
+  }
+  .macro-stage:not(:first-child)::before{content:'';position:absolute;top:-8px;left:24px;width:1px;height:8px;background:rgba(255,255,255,0.25);}
+  .macro-stage .etapa,.macro-stage .def,.macro-stage .count-label{display:none;}
+  .macro-stage .num{font-size:9px;margin-bottom:3px;}
+  .macro-stage .name{font-size:14px;margin-bottom:0;line-height:1.25;max-width:100%;}
+  .macro-stage .count{position:absolute;top:50%;right:16px;transform:translateY(-50%);font-size:17px;margin-top:0;}
+  .macro-stage .count-of{font-size:11px;}
+  .macro-flow-wrap{gap:8px;}
+  .macro-transversal{flex-direction:row;gap:8px;}
+  .trans-bar{padding:8px 10px;border-radius:16px;gap:8px;}
+  .trans-bar .tag{font-size:8px;}
+  .trans-bar .name{font-size:11px;}
+
+  .view{height:auto;min-height:calc(100vh - var(--header-h));overflow:visible;padding-top:16px;padding-bottom:24px;}
+  .macro-top,.macro-flow-wrap,.macro-low{flex:none;}
+}
+@media (max-width:720px){ header.top{backdrop-filter:none;background:#0a1826;} }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.7.0/lib/msal-browser.min.js" onerror="document.getElementById('loginStatus').innerHTML='<span style=color:#ff6a5f>❌ La librería de login no cargó (red/firewall/extensión). Avisa a soporte.</span>'"></script>
 </head>
@@ -1283,7 +1286,18 @@ function initApp(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='flex';
   renderMacro(); buildChips(); renderEtapaTab(); render();
+  relocateFabForMobile();
 }
+function relocateFabForMobile(){
+  const fab = document.getElementById('figuraFabWrap');
+  const gear = document.getElementById('toolsGear');
+  if(isMobileWidth()){
+    if(fab.parentElement.id !== 'headerRight'){ gear.parentElement.insertBefore(fab, gear); }
+  } else {
+    if(fab.parentElement.id === 'headerRight'){ document.querySelector('header.top').insertAdjacentElement('afterend', fab); }
+  }
+}
+window.addEventListener('resize', relocateFabForMobile);
 
 async function doLogin(){
   const btn = document.getElementById('loginBtn');
