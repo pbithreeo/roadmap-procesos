@@ -322,12 +322,22 @@ main{padding:0 24px;max-width:none;margin:0 auto;width:100%;flex:1;box-sizing:bo
 .doc-name{font-size:13px;font-weight:600;}
 .doc-code{font-size:11px;color:var(--text-mute);}
 .doc-chev{color:var(--text-mute);font-size:16px;}
+.doc-form-actions{display:flex;gap:8px;flex-shrink:0;}
+.doc-form-btn{display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:10px;border:1px solid var(--line-strong);background:rgba(255,255,255,0.04);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.doc-form-btn:hover{background:rgba(255,255,255,0.09);}
+.doc-form-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.doc-form-btn.primary:hover{background:var(--accent-deep);}
+.doc-form-btn svg{width:15px;height:15px;flex-shrink:0;}
 .doc-empty{font-size:12.5px;color:var(--text-mute);font-style:italic;}
 .pcard-meta{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--text-soft);margin-top:4px;}
 .pcard-meta b{color:var(--text);}
 
 /* doc detail sub-modal */
 .docmodal{max-width:420px;}
+.docmodal.qrmodal{text-align:center;}
+.docmodal .qr-box{width:200px;height:200px;margin:4px auto 16px;padding:14px;background:#fff;border-radius:16px;display:flex;align-items:center;justify-content:center;}
+.docmodal .qr-box img{width:100%;height:100%;image-rendering:pixelated;}
+.docmodal .qr-hint{font-size:12px;color:var(--text-mute);margin:0 0 18px;line-height:1.5;}
 .docmodal .back{background:none;border:none;color:var(--accent);font-size:13px;cursor:pointer;padding:0;margin-bottom:16px;}
 .docmodal .bigtype{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
 .docmodal h3{font-size:19px;margin:0 0 6px;font-weight:700;}
@@ -408,6 +418,7 @@ footer .ver{opacity:.6;}
   .group-tile{padding:10px 12px;border-radius:14px;}
 }
 @media (max-width:720px){ header.top{backdrop-filter:none;background:#0a1826;} }
+@media (max-width:520px){ .doc-row{flex-wrap:wrap;} .doc-form-actions{width:100%;margin-top:2px;} .doc-form-btn{flex:1;justify-content:center;} }
 
 /* ================= v57 · MÓVIL (debe ir al final de la hoja) ================= */
 .hscroll-track{display:none;}
@@ -505,6 +516,7 @@ footer .ver{opacity:.6;}
   #procGrid .empty-state,#etapaGrid .empty-state{grid-column:1 / span 2;grid-row:1 / span 2;padding:36px 12px;}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.7.0/lib/msal-browser.min.js" onerror="document.getElementById('loginStatus').innerHTML='<span style=color:#ff6a5f>❌ La librería de login no cargó (red/firewall/extensión). Avisa a soporte.</span>'"></script>
 </head>
 <body>
@@ -520,7 +532,7 @@ footer .ver{opacity:.6;}
     <p class="login-status" id="loginStatus"></p>
     <div class="login-spinner" id="loginSpinner"></div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v57</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v58</span></div>
 </div>
 
 <div id="app">
@@ -646,7 +658,7 @@ footer .ver{opacity:.6;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v57</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v58</span></footer>
 </div>
 
 <div class="modal-overlay" id="procModalOverlay">
@@ -672,7 +684,10 @@ const ICONS = {
   user: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>',
   hardhat: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 18v-2a8 8 0 0 1 16 0v2"/><path d="M2 18h20"/><path d="M12 8V4"/></svg>',
   flowchart: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="6" height="5" rx="1"/><rect x="15" y="3" width="6" height="5" rx="1"/><rect x="9" y="16" width="6" height="5" rx="1"/><path d="M6 8v3a2 2 0 0 0 2 2h1m9-5v3a2 2 0 0 1-2 2h-1M12 13v3"/></svg>',
-  building: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="3" width="12" height="18"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/></svg>'
+  building: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="3" width="12" height="18"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/></svg>',
+  formIcon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/><path d="m8.5 18.5 1 1 2-2"/></svg>',
+  qr: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v2M14 20h3M20 19v2"/></svg>',
+  extLink: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>'
 };
 function iconFor(role){
   const r=(role||'').toLowerCase();
@@ -688,8 +703,8 @@ function colorFor(role){
   if(r.includes('estimat')) return 'teal';
   return 'accent';
 }
-const DOC_ICON = {Procedimiento:ICONS.file, "Política":ICONS.shield, Formato:ICONS.download, Instructivo:ICONS.list, Checklist:ICONS.list, "Diagrama de Flujo":ICONS.flowchart, Flujograma:ICONS.flowchart};
-const DOC_COLOR = {Procedimiento:'accent', "Política":'green', Formato:'amber', Instructivo:'purple', Checklist:'purple', "Diagrama de Flujo":'teal', Flujograma:'teal'};
+const DOC_ICON = {Procedimiento:ICONS.file, "Política":ICONS.shield, Formato:ICONS.download, Instructivo:ICONS.list, Checklist:ICONS.list, "Diagrama de Flujo":ICONS.flowchart, Flujograma:ICONS.flowchart, Formulario:ICONS.formIcon};
+const DOC_COLOR = {Procedimiento:'accent', "Política":'green', Formato:'amber', Instructivo:'purple', Checklist:'purple', "Diagrama de Flujo":'teal', Flujograma:'teal', Formulario:'blue'};
 
 let DOC_TYPES = JSON.parse(localStorage.getItem('o_doctypes')||'null') || [];
 let DOC_CONFIG = JSON.parse(localStorage.getItem('o_docconfig')||'null') || {};
@@ -1115,11 +1130,22 @@ function renderProcModal(){
   const visibleDocs = adminMode ? docs : docs.filter(d=>d.active);
   const docsHtml = visibleDocs.map((d,idx)=>{
     const col = DOC_COLOR[d.type]||'accent';
-    const toggle = adminMode ? `<div class="toggle-sw ${d.active?'on':''}" onclick="event.stopPropagation();toggleDocActive('${p.id}',${idx})"></div><button class="admin-del" onclick="event.stopPropagation();removeDoc('${p.id}',${idx})">&times;</button>` : `<span class="doc-chev">&#8250;</span>`;
-    return `<div class="doc-row ${d.active?'':'inactive'}" onclick="${adminMode?'':`openDoc('${p.id}',${idx})`}">
+    const isForm = d.type==='Formulario' && !adminMode;
+    let right;
+    if(adminMode){
+      right = `<div class="toggle-sw ${d.active?'on':''}" onclick="event.stopPropagation();toggleDocActive('${p.id}',${idx})"></div><button class="admin-del" onclick="event.stopPropagation();removeDoc('${p.id}',${idx})">&times;</button>`;
+    } else if(isForm){
+      right = `<div class="doc-form-actions">
+        <button class="doc-form-btn" onclick="event.stopPropagation();openFormQr('${p.id}',${idx})">${ICONS.qr}Ver QR</button>
+        <button class="doc-form-btn primary" onclick="event.stopPropagation();openDoc('${p.id}',${idx})">Abrir${ICONS.extLink}</button>
+      </div>`;
+    } else {
+      right = `<span class="doc-chev">&#8250;</span>`;
+    }
+    return `<div class="doc-row ${d.active?'':'inactive'}" onclick="${(adminMode||isForm)?'':`openDoc('${p.id}',${idx})`}">
       <div class="doc-ic" style="background:var(--${col}-bg,rgba(76,154,255,.16));color:var(--${col},var(--accent))">${DOC_ICON[d.type]||ICONS.file}</div>
       <div class="doc-info"><div class="doc-type">${d.type}</div><div class="doc-name">${d.title}</div><div class="doc-code">${d.code}</div></div>
-      ${toggle}
+      ${right}
     </div>`;
   }).join('') || '<div class="doc-empty">Sin documentos activados para este proceso todavía.</div>';
 
@@ -1164,6 +1190,34 @@ function addDoc(id){
   persist(); renderProcModal();
 }
 
+/* ---- QR DE FORMULARIO ---- */
+function openFormQr(procId, idx){
+  const d = DOC_CONFIG[procId][idx];
+  if(!d.url){ alert('Este formulario todavía no tiene link configurado en la matriz.'); return; }
+  document.getElementById('docModal').className = 'pcard docmodal qrmodal';
+  document.getElementById('docModal').innerHTML = `
+    <button class="back" onclick="closeDoc()">&#8592; Volver al proceso</button>
+    <div class="bigtype" style="margin-left:auto;margin-right:auto;background:var(--blue-bg,rgba(76,154,255,.16));color:var(--blue,var(--accent))">${ICONS.formIcon}</div>
+    <h3>${d.title}</h3>
+    <div class="code">${d.type} &middot; ${d.code}</div>
+    <div class="qr-box" id="qrBox"></div>
+    <p class="qr-hint">Escanea con la cámara del teléfono para abrir el formulario directamente.</p>
+    <button class="openbtn" onclick="window.open('${d.url.replace(/'/g,"&apos;")}','_blank','noopener')">Abrir formulario${ICONS.extLink}</button>
+  `;
+  document.getElementById('docModalOverlay').classList.add('open');
+  renderQr('qrBox', d.url);
+}
+function renderQr(elId, url){
+  const el = document.getElementById(elId);
+  if(!el) return;
+  if(window.QRCode){
+    el.innerHTML='';
+    new QRCode(el, {text:url, width:172, height:172, colorDark:'#0a1826', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M});
+  } else {
+    el.innerHTML = `<img alt="Código QR" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}">`;
+  }
+}
+
 /* ---- DOC DETAIL MODAL ---- */
 function openDoc(procId, idx){
   const d = DOC_CONFIG[procId][idx];
@@ -1179,7 +1233,7 @@ function openDoc(procId, idx){
   `;
   document.getElementById('docModalOverlay').classList.add('open');
 }
-function closeDoc(){ document.getElementById('docModalOverlay').classList.remove('open'); }
+function closeDoc(){ document.getElementById('docModalOverlay').classList.remove('open'); document.getElementById('docModal').className='pcard docmodal'; }
 function openLinkPlaceholder(name){ alert('Enlace no configurado aún para: '+name); }
 
 /* ---- ADMIN MODE ---- */
