@@ -345,6 +345,10 @@ main{padding:0 24px;max-width:none;margin:0 auto;width:100%;flex:1;box-sizing:bo
 .docmodal .openbtn{width:100%;padding:13px;background:var(--accent);border:none;border-radius:12px;color:#fff;font-weight:600;font-size:13.5px;cursor:pointer;margin-top:6px;}
 .docmodal .openbtn:hover{background:var(--accent-deep);}
 .docmodal .hint{font-size:11.5px;color:var(--text-mute);margin-top:14px;line-height:1.5;}
+#procModalOverlay{gap:24px;}
+#procModalOverlay .pcard{flex:0 1 640px;}
+.qr-side-card{max-width:640px;display:none;flex-direction:column;align-items:center;text-align:center;justify-content:center;}
+.qr-side-card.open{display:flex;}
 
 /* admin */
 #adminPanel{display:none;margin-top:20px;padding-top:18px;border-top:1px dashed var(--line-strong);}
@@ -532,7 +536,7 @@ footer .ver{opacity:.6;}
     <p class="login-status" id="loginStatus"></p>
     <div class="login-spinner" id="loginSpinner"></div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v58</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v59</span></div>
 </div>
 
 <div id="app">
@@ -658,11 +662,12 @@ footer .ver{opacity:.6;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v58</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v59</span></footer>
 </div>
 
 <div class="modal-overlay" id="procModalOverlay">
   <div class="pcard" id="procModal"></div>
+        <div class="pcard docmodal qr-side-card" id="qrSideCard"></div>
 </div>
 <div class="modal-overlay" id="docModalOverlay">
   <div class="pcard docmodal" id="docModal"></div>
@@ -1112,10 +1117,18 @@ function render(){
 /* ---- PROCESS DETAIL MODAL ---- */
 function openProc(p){
   currentProc = p;
+  qrOpenKey = null;
+  const qrCard = document.getElementById('qrSideCard');
+  qrCard.classList.remove('open'); qrCard.innerHTML='';
   renderProcModal();
   document.getElementById('procModalOverlay').classList.add('open');
 }
-function closeProc(){ document.getElementById('procModalOverlay').classList.remove('open'); }
+function closeProc(){
+  document.getElementById('procModalOverlay').classList.remove('open');
+  qrOpenKey = null;
+  const qrCard = document.getElementById('qrSideCard');
+  qrCard.classList.remove('open'); qrCard.innerHTML='';
+}
 
 function renderProcModal(){
   const p = currentProc;
@@ -1136,7 +1149,7 @@ function renderProcModal(){
       right = `<div class="toggle-sw ${d.active?'on':''}" onclick="event.stopPropagation();toggleDocActive('${p.id}',${idx})"></div><button class="admin-del" onclick="event.stopPropagation();removeDoc('${p.id}',${idx})">&times;</button>`;
     } else if(isForm){
       right = `<div class="doc-form-actions">
-        <button class="doc-form-btn" onclick="event.stopPropagation();openFormQr('${p.id}',${idx})">${ICONS.qr}Ver QR</button>
+        <button class="doc-form-btn" onclick="event.stopPropagation();openFormQr('${p.id}',${idx})">${ICONS.qr}${qrOpenKey===(p.id+'::'+idx)?'Ocultar QR':'Ver QR'}</button>
         <button class="doc-form-btn primary" onclick="event.stopPropagation();openDoc('${p.id}',${idx})">Abrir${ICONS.extLink}</button>
       </div>`;
     } else {
@@ -1191,7 +1204,36 @@ function addDoc(id){
 }
 
 /* ---- QR DE FORMULARIO ---- */
+let qrOpenKey = null; // "<procId>::<idx>" del formulario cuyo QR está visible (solo escritorio)
 function openFormQr(procId, idx){
+  if(isMobileWidth()){ openFormQrMobile(procId, idx); return; }
+  const key = procId+'::'+idx;
+  if(qrOpenKey === key){ closeQrSide(); return; }
+  const d = DOC_CONFIG[procId][idx];
+  if(!d.url){ alert('Este formulario todavía no tiene link configurado en la matriz.'); return; }
+  qrOpenKey = key;
+  const card = document.getElementById('qrSideCard');
+  card.innerHTML = `
+    <div class="bigtype" style="margin-left:auto;margin-right:auto;background:var(--blue-bg,rgba(76,154,255,.16));color:var(--blue,var(--accent))">${ICONS.formIcon}</div>
+    <h3>${d.title}</h3>
+    <div class="code">${d.type} &middot; ${d.code}</div>
+    <div class="qr-box" id="qrSideBox"></div>
+    <p class="qr-hint">Escanea con la cámara del teléfono para abrir el formulario directamente.</p>
+    <button class="openbtn" onclick="window.open('${d.url.replace(/'/g,"&apos;")}','_blank','noopener')">Abrir formulario${ICONS.extLink}</button>
+  `;
+  card.classList.add('open');
+  renderQr('qrSideBox', d.url);
+  renderProcModal();
+}
+function closeQrSide(){
+  qrOpenKey = null;
+  const card = document.getElementById('qrSideCard');
+  card.classList.remove('open');
+  card.innerHTML='';
+  renderProcModal();
+}
+/* ---- QR DE FORMULARIO (CELULAR, sin cambios desde v58) ---- */
+function openFormQrMobile(procId, idx){
   const d = DOC_CONFIG[procId][idx];
   if(!d.url){ alert('Este formulario todavía no tiene link configurado en la matriz.'); return; }
   document.getElementById('docModal').className = 'pcard docmodal qrmodal';
