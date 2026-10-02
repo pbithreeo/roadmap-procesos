@@ -542,7 +542,7 @@ footer .ver{opacity:.6;}
     <p class="login-status" id="loginStatus"></p>
     <div class="login-spinner" id="loginSpinner"></div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.3</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.4</span></div>
 </div>
 
 <div id="app">
@@ -674,7 +674,7 @@ footer .ver{opacity:.6;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.3</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.4</span></footer>
 </div>
 
 <div class="modal-overlay" id="procModalOverlay">
@@ -735,6 +735,11 @@ function persist(){
 }
 
 function cleanPriority(p){ return (p||'').replace("⚠️️","").trim() || "Sin definir"; }
+const PRIORITY_ORDER = ['Crítica','Alta','Media','Baja','Integrar','Fuera de fase','Sin priorizar'];
+function priorityRank(p){
+  const idx = PRIORITY_ORDER.indexOf(cleanPriority(p));
+  return idx===-1 ? PRIORITY_ORDER.length : idx;
+}
 function priorityClass(p){
   p = p || "";
   if(p.indexOf("Crítica")>-1) return "crit";
@@ -1094,11 +1099,12 @@ document.addEventListener('click', e=>{
 
 function filtered(){
   const q=state.search.toLowerCase();
+  const byPriority=(a,b)=>priorityRank(a.priority)-priorityRank(b.priority);
   if(vista2Mode==='transversal'){
     let list = TRANSVERSAL_PROCS;
     if(state.group){ list = list.filter(p=>p.group===state.group); }
     if(q){ list = list.filter(p=>[p.id,p.process,p.scope,p.group].join(' ').toLowerCase().indexOf(q)>-1); }
-    return list;
+    return list.slice().sort(byPriority);
   }
   return PROCS.filter(p=>{
     if(state.areas.size && !state.areas.has(p.area)) return false;
@@ -1106,7 +1112,7 @@ function filtered(){
     if(state.group){ if(sopsGroupModeIsArea ? p.area!==state.group : p.group!==state.group) return false; }
     if(q){ const hay=[p.id,p.process,p.scope,p.tools,p.owner,p.group].join(' ').toLowerCase(); if(hay.indexOf(q)===-1) return false; }
     return true;
-  });
+  }).sort(byPriority);
 }
 function render(){
   fitGridsSoon();
