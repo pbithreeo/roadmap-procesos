@@ -542,7 +542,7 @@ footer .ver{opacity:.6;}
     <p class="login-status" id="loginStatus"></p>
     <div class="login-spinner" id="loginSpinner"></div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.4</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.5</span></div>
 </div>
 
 <div id="app">
@@ -674,7 +674,7 @@ footer .ver{opacity:.6;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.4</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.5</span></footer>
 </div>
 
 <div class="modal-overlay" id="procModalOverlay">
@@ -750,7 +750,7 @@ function priorityClass(p){
 }
 
 function switchView(v){
-  document.getElementById('macroModeTabs').style.display = (v==='macro') ? 'flex' : 'none';
+  document.getElementById('macroModeTabs').style.display = (v==='macro' && SHOW_ROW_WHEEL_TOGGLE) ? 'flex' : 'none';
   if(v==='universe'){ renderStageBar(); renderSopsGroupBar(); render(); setTimeout(()=>{centerActivePill('stageBar');centerActivePill('sopsGroupBar');},60); }
   document.getElementById('view-'+v).scrollIntoView({behavior:'smooth', block:'start'});
   document.getElementById('mainTabs').classList.remove('open');
@@ -777,7 +777,7 @@ const spyObserver = new IntersectionObserver((entries)=>{
     if(e.isIntersecting){
       const v = e.target.id.replace('view-','');
       document.querySelectorAll('#mainTabs .tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
-      document.getElementById('macroModeTabs').style.display = (v==='macro') ? 'flex' : 'none';
+      document.getElementById('macroModeTabs').style.display = (v==='macro' && SHOW_ROW_WHEEL_TOGGLE) ? 'flex' : 'none';
     }
   });
 }, {threshold:0.35});
@@ -835,6 +835,7 @@ function toggleMacroMode(){
   if(macroMode==='wheel') renderWheel();
 }
 let macroMode='row';
+const SHOW_ROW_WHEEL_TOGGLE = false; // Desactivado a pedido — reactivar poniendo esto en true cuando se indique
 function goToStage(stage){
   vista2Mode='etapa';
   state.stage = stage;
@@ -948,6 +949,7 @@ function renderEtapaGrid(){
       list = list.filter(p=> groupModeIsArea ? p.area===groupSelected : p.group===groupSelected);
     }
   }
+  list = list.slice().sort((a,b)=>priorityRank(a.priority)-priorityRank(b.priority));
   const total = list.length;
   const grid=document.getElementById('etapaGrid');
   const cells = list.map((p,i)=>{
