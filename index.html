@@ -17,6 +17,7 @@
   --red:#ff6a5f; --red-bg:rgba(255,106,95,0.14);
   --purple:#a78bfa; --purple-bg:rgba(167,139,250,0.14);
   --teal:#41c9c9; --teal-bg:rgba(65,201,201,0.14);
+  --rose:#f472b6; --rose-bg:rgba(244,114,182,0.14);
   --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box;}
@@ -541,7 +542,7 @@ footer .ver{opacity:.6;}
     <p class="login-status" id="loginStatus"></p>
     <div class="login-spinner" id="loginSpinner"></div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.2</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.3</span></div>
 </div>
 
 <div id="app">
@@ -673,7 +674,7 @@ footer .ver{opacity:.6;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.2</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.3</span></footer>
 </div>
 
 <div class="modal-overlay" id="procModalOverlay">
@@ -703,7 +704,8 @@ const ICONS = {
   building: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="3" width="12" height="18"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/></svg>',
   formIcon: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/><path d="m8.5 18.5 1 1 2-2"/></svg>',
   qr: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v2M14 20h3M20 19v2"/></svg>',
-  extLink: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>'
+  extLink: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>',
+  presentation: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M9 21h6M12 17v4"/><path d="M6.5 13.5 10 9l2.5 2.5L17.5 7.5"/></svg>'
 };
 function iconFor(role){
   const r=(role||'').toLowerCase();
@@ -719,8 +721,8 @@ function colorFor(role){
   if(r.includes('estimat')) return 'teal';
   return 'accent';
 }
-const DOC_ICON = {Procedimiento:ICONS.file, "Política":ICONS.shield, Formato:ICONS.download, Instructivo:ICONS.list, Checklist:ICONS.list, "Diagrama de Flujo":ICONS.flowchart, Flujograma:ICONS.flowchart, Formulario:ICONS.formIcon};
-const DOC_COLOR = {Procedimiento:'accent', "Política":'green', Formato:'amber', Instructivo:'purple', Checklist:'purple', "Diagrama de Flujo":'teal', Flujograma:'teal', Formulario:'blue'};
+const DOC_ICON = {Procedimiento:ICONS.file, "Política":ICONS.shield, Formato:ICONS.download, Instructivo:ICONS.list, Checklist:ICONS.list, "Diagrama de Flujo":ICONS.flowchart, Flujograma:ICONS.flowchart, Formulario:ICONS.formIcon, "Presentación":ICONS.presentation};
+const DOC_COLOR = {Procedimiento:'accent', "Política":'green', Formato:'amber', Instructivo:'purple', Checklist:'purple', "Diagrama de Flujo":'teal', Flujograma:'teal', Formulario:'blue', "Presentación":'rose'};
 
 let DOC_TYPES = JSON.parse(localStorage.getItem('o_doctypes')||'null') || [];
 let DOC_CONFIG = JSON.parse(localStorage.getItem('o_docconfig')||'null') || {};
