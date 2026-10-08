@@ -19,6 +19,7 @@
   --teal:#41c9c9; --teal-bg:rgba(65,201,201,0.14);
   --rose:#f472b6; --rose-bg:rgba(244,114,182,0.14);
   --sky:#38bdf8; --sky-bg:rgba(56,189,248,0.14);
+  --mark:#ffd60a; --mark-bg:rgba(255,214,10,0.16);
   --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box;}
@@ -116,7 +117,8 @@ main{padding:0 24px;max-width:none;margin:0 auto;width:100%;flex:1;box-sizing:bo
 
 /* ---------- MACRO FLOW (armonizado: top ~1/3, tarjetas ~2/3) ---------- */
 #view-macro{position:relative;display:flex;flex-direction:column;justify-content:flex-start;padding-top:0;}
-.macro-top{flex:150 1 0;min-height:0;display:flex;flex-direction:column;justify-content:center;}
+.macro-top{flex:150 1 0;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;}
+#view-macro{padding-top:20px;}
 .macro-top .section-sub{max-width:760px;margin:0;line-height:1.65;}
 .macro-low{flex:159 1 0;min-height:0;display:flex;align-items:center;gap:28px;flex-wrap:wrap;}
 #view-macro .macro-low{flex:0 0 auto;border-top:1px solid var(--line);padding-top:18px;margin-top:12px;}
@@ -274,6 +276,22 @@ main{padding:0 24px;max-width:none;margin:0 auto;width:100%;flex:1;box-sizing:bo
 .figura-dim{opacity:.16;filter:grayscale(.7);}
 .figura-match{border-color:var(--green)!important;box-shadow:0 0 0 1px var(--green) inset,0 0 18px rgba(62,207,142,0.18);}
 .fp-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;}
+
+#docTypeFabWrap{position:fixed;top:calc(var(--header-h) + 16px);right:78px;z-index:60;}
+#docTypeFab{width:42px;height:42px;border-radius:50%;background:var(--card2);border:1px solid var(--line-strong);color:var(--text-soft);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.4);transition:border-color .15s,color .15s;}
+#docTypeFab:hover{border-color:var(--mark);color:#fff;}
+#docTypeFab.on{background:var(--mark);border-color:var(--mark);color:#1a1200;}
+#docTypeMenu{display:none;position:absolute;top:50px;right:0;width:280px;max-height:380px;overflow-y:auto;
+  background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--line-strong);border-radius:16px;
+  box-shadow:0 24px 60px rgba(0,0,0,0.5);}
+#docTypeMenu.open{display:block;}
+.doctype-opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13px;margin:6px;}
+.doctype-opt:hover{background:rgba(255,255,255,0.06);}
+.doctype-opt.active{background:rgba(255,214,10,0.16);color:var(--mark);font-weight:600;}
+.doctype-opt .do-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.doctype-dim{opacity:.16;filter:grayscale(.7);}
+.doctype-match{border-color:var(--mark)!important;box-shadow:0 0 0 1px var(--mark) inset,0 0 18px rgba(255,214,10,0.22);}
+
 .fp-head button{background:none;border:none;color:var(--text-mute);font-size:16px;cursor:pointer;}
 .fp-body{padding:14px 16px;}
 .fp-foot{padding:12px 16px;border-top:1px solid var(--line);}
@@ -399,6 +417,7 @@ footer .ver{opacity:.6;}
   #toolsDock.open{display:flex;}
   #headerRight #figuraFabWrap{position:relative;top:0;right:0;}
   #figuraFab{width:38px;height:38px;}
+  #docTypeFabWrap{display:none!important;}
 
   #view-macro .section-sub{display:none;}
   .macro-flow{display:flex;flex-direction:column;gap:0;}
@@ -543,7 +562,7 @@ footer .ver{opacity:.6;}
     <p class="login-status" id="loginStatus"></p>
     <div class="login-spinner" id="loginSpinner"></div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.6</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.7</span></div>
 </div>
 
 <div id="app">
@@ -591,6 +610,17 @@ footer .ver{opacity:.6;}
       <div class="fp-head"><span>Filtrar por figura</span><button onclick="toggleFiguraMenu()">&times;</button></div>
       <div class="fp-body" id="figuraMenuBody"></div>
       <div class="fp-foot"><button class="clear-btn" onclick="clearFigura()">Quitar filtro</button></div>
+    </div>
+  </div>
+
+  <div id="docTypeFabWrap">
+    <button id="docTypeFab" onclick="toggleDocTypeMenu()" title="Filtrar por tipo de documento">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.4 12.3 12.3 20.4a1.8 1.8 0 0 1-2.6 0l-6.1-6.1a1.8 1.8 0 0 1 0-2.6l8.1-8.1a1.8 1.8 0 0 1 1.3-.5l5.9.1a1.8 1.8 0 0 1 1.8 1.8l.1 5.9a1.8 1.8 0 0 1-.4 1.3z"/><circle cx="15.3" cy="7.7" r="1.3" fill="currentColor" stroke="none"/></svg>
+    </button>
+    <div id="docTypeMenu">
+      <div class="fp-head"><span>Filtrar por tipo de documento</span><button onclick="toggleDocTypeMenu()">&times;</button></div>
+      <div class="fp-body" id="docTypeMenuBody"></div>
+      <div class="fp-foot"><button class="clear-btn" onclick="clearDocType()">Quitar filtro</button></div>
     </div>
   </div>
 
@@ -675,7 +705,7 @@ footer .ver{opacity:.6;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.6</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v60.7</span></footer>
 </div>
 
 <div class="modal-overlay" id="procModalOverlay">
@@ -807,6 +837,7 @@ function renderMacro(){
   }).join('');
   observeReveal(el);
   refreshFiguraDim();
+  refreshDocTypeDim();
   renderWheel(counts);
 }
 
@@ -966,6 +997,7 @@ function renderEtapaGrid(){
   grid.innerHTML = cells.join('');
   observeReveal(grid);
   refreshFiguraDim();
+  refreshDocTypeDim();
   const more = document.getElementById('etapaGridMore');
   more.innerHTML = total>10 ? `${total} procesos — desliza para ver todos &#8594;` : '';
 }
@@ -988,12 +1020,14 @@ function selectFigura(name){
   document.getElementById('figuraFab').classList.toggle('on', !!activeFigura);
   renderFiguraMenu();
   refreshFiguraDim();
+  refreshDocTypeDim();
 }
 function clearFigura(){
   activeFigura = null;
   document.getElementById('figuraFab').classList.remove('on');
   renderFiguraMenu();
   refreshFiguraDim();
+  refreshDocTypeDim();
 }
 function matchesFigura(p){
   if(!activeFigura) return true;
@@ -1021,6 +1055,58 @@ function refreshFiguraDim(){
 }
 document.addEventListener('click', e=>{
   const menu=document.getElementById('figuraMenu'), fab=document.getElementById('figuraFab');
+  if(menu.classList.contains('open') && !menu.contains(e.target) && !fab.contains(e.target)) menu.classList.remove('open');
+});
+
+/* ---- FILTRO POR TIPO DE DOCUMENTO (gemelo del de figura, solo escritorio) ---- */
+let activeDocType = null;
+function allDocTypesInUse(){
+  const set = new Set();
+  Object.values(DOC_CONFIG).forEach(list=>(list||[]).forEach(d=>{ if(d && d.active && d.type) set.add(d.type); }));
+  return [...set].sort((a,b)=>a.localeCompare(b,'es'));
+}
+function renderDocTypeMenu(){
+  const types = allDocTypesInUse();
+  const body = document.getElementById('docTypeMenuBody');
+  body.innerHTML = types.length ? types.map(t=>{
+    const col = DOC_COLOR[t]||'accent';
+    return `<div class="doctype-opt ${activeDocType===t?'active':''}" onclick="selectDocType('${t.replace(/'/g,"&apos;")}')">
+      <span class="do-dot" style="background:var(--${col},var(--accent))"></span><span>${t}</span>
+    </div>`;
+  }).join('') : '<div class="doc-empty">Aún no hay documentos cargados.</div>';
+}
+function toggleDocTypeMenu(){
+  const m=document.getElementById('docTypeMenu');
+  if(!m.classList.contains('open')) renderDocTypeMenu();
+  m.classList.toggle('open');
+}
+function selectDocType(type){
+  activeDocType = (activeDocType===type) ? null : type;
+  document.getElementById('docTypeFab').classList.toggle('on', !!activeDocType);
+  renderDocTypeMenu();
+  refreshDocTypeDim();
+}
+function clearDocType(){
+  activeDocType = null;
+  document.getElementById('docTypeFab').classList.remove('on');
+  renderDocTypeMenu();
+  refreshDocTypeDim();
+}
+function matchesDocType(p){
+  if(!activeDocType) return true;
+  const docs = DOC_CONFIG[p.id] || [];
+  return docs.some(d=>d && d.active && d.type===activeDocType);
+}
+function refreshDocTypeDim(){
+  document.querySelectorAll('[data-pid]').forEach(el=>{
+    const p = PROCS.find(x=>x.id===el.dataset.pid) || TRANSVERSAL_PROCS.find(x=>x.id===el.dataset.pid);
+    const match = !!p && matchesDocType(p);
+    el.classList.toggle('doctype-dim', !!activeDocType && !match);
+    el.classList.toggle('doctype-match', !!activeDocType && match);
+  });
+}
+document.addEventListener('click', e=>{
+  const menu=document.getElementById('docTypeMenu'), fab=document.getElementById('docTypeFab');
   if(menu.classList.contains('open') && !menu.contains(e.target) && !fab.contains(e.target)) menu.classList.remove('open');
 });
 
@@ -1135,6 +1221,7 @@ function render(){
   }).join('');
   observeReveal(grid);
   refreshFiguraDim();
+  refreshDocTypeDim();
 }
 
 /* ---- PROCESS DETAIL MODAL ---- */
