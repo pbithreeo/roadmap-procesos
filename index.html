@@ -607,7 +607,7 @@ footer .ver{opacity:.6;}
     <p class="login-status" id="loginStatus"></p>
     <div class="login-spinner" id="loginSpinner"></div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v61.1</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v61.2</span></div>
   <div id="loginQrWrap">
     <button id="loginQrFab" title="Compartir acceso (QR)">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -768,7 +768,7 @@ footer .ver{opacity:.6;}
 
       <div class="etapa-content" style="justify-content:flex-start;">
         <div class="controls-row">
-          <input type="text" id="search" placeholder="Buscar por proceso, ID, herramienta, owner...">
+          <input type="text" id="search" placeholder="Buscar por proceso, ID, documento, código, herramienta, owner...">
           <div style="position:relative;">
             <button class="filters-toggle" id="filtersToggle" onclick="toggleFiltersPopup()">
               <span>Filtros</span><span class="count" id="filterCount" style="display:none;">0</span><span class="chev">&#9662;</span>
@@ -791,7 +791,7 @@ footer .ver{opacity:.6;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v61.1</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v61.2</span></footer>
 </div>
 
 <div id="qrFullscreenOverlay">
@@ -916,7 +916,7 @@ function renderMacro(){
     const sel = state.stage===s.stage ? 'selected' : '';
     const total = STAGE_TOTALS[s.stage]||0;
     const visible = counts[s.stage]||0;
-    const countDisplay = (total>visible) ? `${visible}<span class="count-of">/${total}</span>` : `${visible}`;
+    const countDisplay = `${visible}`;
     const card = `<div class="macro-stage reveal ${sel}" data-stage="${s.stage}" style="transition-delay:${i*60}ms" onclick="goToStage('${s.stage}')">
       <div class="num">Etapa ${s.order}</div>
       <div class="name">${s.stage}</div>
@@ -943,7 +943,7 @@ function renderWheel(counts){
   const s = STAGES.find(x=>x.stage===wheelSelected);
   const totalW = STAGE_TOTALS[s.stage]||0;
   const visibleW = counts[s.stage]||0;
-  const countDisplayW = (totalW>visibleW) ? `${visibleW}<span class="count-of">/${totalW}</span>` : `${visibleW}`;
+  const countDisplayW = `${visibleW}`;
   document.getElementById('wheelDetail').innerHTML = `
     <div class="etapa">${s.etapa}</div>
     <div class="def">${s.def}</div>
@@ -1279,20 +1279,23 @@ document.addEventListener('click', e=>{
   }
 });
 
+function docSearchText(pid){
+  return (DOC_CONFIG[pid]||[]).filter(d=>d.active).map(d=>[d.code,d.title,d.type].join(' ')).join(' ');
+}
 function filtered(){
   const q=state.search.toLowerCase();
   const byPriority=(a,b)=>priorityRank(a.priority)-priorityRank(b.priority);
   if(vista2Mode==='transversal'){
     let list = TRANSVERSAL_PROCS;
     if(state.group){ list = list.filter(p=>p.group===state.group); }
-    if(q){ list = list.filter(p=>[p.id,p.process,p.scope,p.group].join(' ').toLowerCase().indexOf(q)>-1); }
+    if(q){ list = list.filter(p=>[p.id,p.process,p.scope,p.group,docSearchText(p.id)].join(' ').toLowerCase().indexOf(q)>-1); }
     return list.slice().sort(byPriority);
   }
   return PROCS.filter(p=>{
     if(state.areas.size && !state.areas.has(p.area)) return false;
     if(state.stage && p.macro!==state.stage) return false;
     if(state.group){ if(sopsGroupModeIsArea ? p.area!==state.group : p.group!==state.group) return false; }
-    if(q){ const hay=[p.id,p.process,p.scope,p.tools,p.owner,p.group].join(' ').toLowerCase(); if(hay.indexOf(q)===-1) return false; }
+    if(q){ const hay=[p.id,p.process,p.scope,p.tools,p.owner,p.group,docSearchText(p.id)].join(' ').toLowerCase(); if(hay.indexOf(q)===-1) return false; }
     return true;
   }).sort(byPriority);
 }
