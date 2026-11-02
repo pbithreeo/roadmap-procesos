@@ -614,16 +614,22 @@ html[data-theme="light"]{
   --login-g1:#e4e9f0; --login-g2:#e9ecef; --pcard-1:#ffffff; --pcard-2:#f0f2f5; --sel-1:#e2e9f3;
   --text-body:#3a424c; --sh5:rgba(28,33,40,0.16); --sh4:rgba(28,33,40,0.14); --dim:rgba(28,33,40,0.28); --dim2:rgba(28,33,40,0.42);
 }
-html[data-theme="light"] .tool-btn svg{stroke:#1c2128;}
-html[data-theme="light"] .tool-btn-light{background:#f4f5f7;border:1px solid #d9dde3;}
-html[data-theme="light"] .tool-btn-light:hover{background:#fff;}
+/* Barra superior: se mantiene azul marino en ambos temas */
+html[data-theme="light"] header.top{
+  --bg:#050d16; --bg2:#0a1826; --card:#0d2338; --card2:#153350;
+  --line:rgba(255,255,255,0.09); --line-strong:rgba(255,255,255,0.18);
+  --text:#eef3f8; --text-soft:#9fb0c2; --text-mute:#6e8195;
+  --accent:#4c9aff; --accent-deep:#1f5fce;
+  --tint:255,255,255; --strong:#fff;
+  --hdr-bg:#0a1826; --dock-bg:#0d2338; --tool-bg:#153a5c; --tool-bg-h:#1e4d78;
+  --sh5:rgba(0,0,0,0.5); --sh4:rgba(0,0,0,0.4); color:var(--text);
+}
 html[data-theme="light"] #loginQrFab svg{stroke:#4a525c;}
 html[data-theme="light"] #loginQrFab{color:var(--text-soft);background:rgba(28,33,40,0.04);border-color:rgba(28,33,40,0.2);}
 html[data-theme="light"] .qr-access-box,html[data-theme="light"] #loginQrBox,html[data-theme="light"] .docmodal .qr-box{border:1px solid #e1e4e8;}
 html[data-theme="light"] .macro-stage:not(:first-child)::before{background:rgba(28,33,40,0.3);}
 html[data-theme="light"] .proc-card,html[data-theme="light"] .group-tile,html[data-theme="light"] .doc-row{background:#fff;}
 html[data-theme="light"] #qrFullscreenOverlay .qr-access-sub{color:#9fb0c2;}
-html[data-theme="light"] .tab-btn.active{box-shadow:0 1px 3px rgba(28,33,40,0.12);}
 html[data-theme="light"] .badge.media,html[data-theme="light"] .badge.other{color:var(--text-soft);}
 
 /* ---------- TOGGLE DE TEMA (luna / sol, vertical) ---------- */
