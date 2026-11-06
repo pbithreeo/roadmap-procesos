@@ -660,7 +660,7 @@ html[data-theme="light"] .theme-toggle .sun{stroke:#fff;}
     <p class="login-status" id="loginStatus"></p>
     <div class="login-spinner" id="loginSpinner"></div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v61.3</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v61.4</span></div>
   <div id="loginQrWrap">
     <button id="loginQrFab" title="Compartir acceso (QR)">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -849,7 +849,7 @@ html[data-theme="light"] .theme-toggle .sun{stroke:#fff;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v61.3</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v61.4</span></footer>
 </div>
 
 <div id="qrFullscreenOverlay">
@@ -1426,7 +1426,7 @@ function renderProcModal(){
     }
     return `<div class="doc-row ${d.active?'':'inactive'}" onclick="${(adminMode||isForm)?'':`openDoc('${p.id}',${idx})`}">
       <div class="doc-ic" style="background:var(--${col}-bg,rgba(76,154,255,.16));color:var(--${col},var(--accent))">${DOC_ICON[d.type]||ICONS.file}</div>
-      <div class="doc-info"><div class="doc-type">${d.type}</div><div class="doc-name">${d.title}</div><div class="doc-code">${d.code}</div></div>
+      <div class="doc-info"><div class="doc-type">${d.type}${d.restricted?' &middot; <span title="Solo visible para usuarios con acceso completo">&#128274; Restringido</span>':''}</div><div class="doc-name">${d.title}</div><div class="doc-code">${d.code}</div></div>
       ${right}
     </div>`;
   }).join('') || '<div class="doc-empty">Sin documentos activados para este proceso todavía.</div>';
@@ -1759,10 +1759,44 @@ function parseDocumentosPorProceso(values){
     if(!pid || !type) continue;
     (out[pid] = out[pid]||[]).push({
       type, code: cellStr(row,h.map["Codigo"]), title: cellStr(row,h.map["Nombre del Documento"]),
-      active: cellStr(row,h.map["Activo"]).toUpperCase()==='X', url: cellStr(row,h.map["Link SharePoint"])
+      active: cellStr(row,h.map["Activo"]).toUpperCase()==='X', url: cellStr(row,h.map["Link SharePoint"]),
+      restricted: cellStr(row, h.map["Restricción"]!==undefined?h.map["Restricción"]:h.map["Restriccion"]).toUpperCase()==='X'
     });
   }
   return out;
+}
+
+/* ---- ACCESO A DOCUMENTOS RESTRINGIDOS ----
+   Hoja "Accesos" del Excel: columna "Correo". Quien esté en la lista ve todo;
+   el resto no ve los documentos marcados con X en "Restricción".
+   Es un filtro de vista (no seguridad de SharePoint). Si la hoja no existe o falla, se oculta lo restringido. */
+let USER_FULL_ACCESS = false;
+function currentUserEmails(){
+  const out = [];
+  try{
+    const a = getMsalInstance().getAllAccounts()[0];
+    if(a){
+      out.push(a.username);
+      const c = a.idTokenClaims || {};
+      out.push(c.email, c.preferred_username, c.upn);
+    }
+  }catch(e){}
+  return out.filter(Boolean).map(x=>String(x).trim().toLowerCase());
+}
+function parseAccesos(values){
+  const h = findHeaderRow(values, ["Correo"]);
+  if(!h) return [];
+  const out = [];
+  for(let r=h.rowIndex+1; r<values.length; r++){
+    const v = cellStr(values[r]||[], h.map["Correo"]).toLowerCase();
+    if(v) out.push(v);
+  }
+  return out;
+}
+function applyDocRestrictions(){
+  Object.keys(DOC_CONFIG).forEach(pid=>{
+    DOC_CONFIG[pid] = (DOC_CONFIG[pid]||[]).filter(d=> !d.restricted || USER_FULL_ACCESS);
+  });
 }
 
 async function loadAllData(){
@@ -1784,6 +1818,12 @@ async function loadAllData(){
   const liveDocConfigTrans = parseDocumentosPorProceso(results["Documentos Transversales"]);
   DOC_TYPES = JSON.parse(localStorage.getItem('o_doctypes')||'null') || liveDocTypes;
   DOC_CONFIG = JSON.parse(localStorage.getItem('o_docconfig')||'null') || Object.assign({}, liveDocConfig, liveDocConfigTrans);
+  try{
+    const acc = parseAccesos(await fetchSheetValues(token, "Accesos"));
+    const me = currentUserEmails();
+    USER_FULL_ACCESS = me.some(e=>acc.includes(e));
+  }catch(e){ USER_FULL_ACCESS = false; }
+  applyDocRestrictions();
 
   const allTrans = parseProcesosTransversales(results["Procesos Transversales"]);
   TRANSVERSAL_PROCS = allTrans.filter(p=>!p.oculto);
