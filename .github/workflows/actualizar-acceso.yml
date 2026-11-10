@@ -1,0 +1,53 @@
+# Actualiza la lista de teléfonos de acceso.json cuando Power Automate avisa que cambió la lista Employee.
+# Ruta en el repositorio:  .github/workflows/actualizar-acceso.yml
+name: Actualizar acceso (teléfonos)
+
+on:
+  repository_dispatch:
+    types: [actualizar-acceso]
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: actualizar-acceso
+  cancel-in-progress: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reemplazar teléfonos en acceso.json
+        env:
+          PHONES: ${{ github.event.client_payload.phones }}
+        run: |
+          python3 - <<'PY'
+          import os, re, json, hashlib
+          data = json.load(open('acceso.json', encoding='utf-8'))
+          salt = data.get('salt', '')
+          users = set()
+          for raw in os.environ.get('PHONES', '').split(','):
+              d = re.sub(r'\D', '', raw)[-10:]
+              if len(d) == 10:
+                  users.add(hashlib.sha256((salt + d).encode()).hexdigest())
+          data['users'] = sorted(users)
+          json.dump(data, open('acceso.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+          print(len(users), 'teléfonos activos')
+          PY
+
+      - name: Publicar cambios
+        run: |
+          git config user.name  "roadmap-bot"
+          git config user.email "roadmap-bot@users.noreply.github.com"
+          git add acceso.json
+          git diff --cached --quiet && echo "Sin cambios" && exit 0
+          git commit -m "Actualizar teléfonos de acceso"
+          git push
+
+      - name: Forzar publicación de GitHub Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST repos/${{ github.repository }}/pages/builds || true
