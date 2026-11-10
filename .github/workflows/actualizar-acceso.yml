@@ -20,22 +20,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Reemplazar teléfonos en acceso.json
+      - name: Actualizar acceso.json
         env:
-          PHONES: ${{ github.event.client_payload.phones }}
+          PAYLOAD: ${{ toJSON(github.event.client_payload) }}
         run: |
           python3 - <<'PY'
           import os, re, json, hashlib
+          pay  = json.loads(os.environ.get('PAYLOAD') or '{}')
           data = json.load(open('acceso.json', encoding='utf-8'))
           salt = data.get('salt', '')
           users = set()
-          for raw in os.environ.get('PHONES', '').split(','):
+          for raw in str(pay.get('phones', '')).split(','):
               d = re.sub(r'\D', '', raw)[-10:]
               if len(d) == 10:
                   users.add(hashlib.sha256((salt + d).encode()).hexdigest())
           data['users'] = sorted(users)
+          # procesos/documentos: solo si el aviso los trae (el flujo programado los envía)
+          if isinstance(pay.get('procs'), list) and isinstance(pay.get('docs'), (list, dict)):
+              docs = pay['docs']
+              if isinstance(docs, list):   # lista plana -> agrupada por ID de proceso
+                  grouped = {}
+                  for d in docs:
+                      pid = d.pop('pid', '')
+                      grouped.setdefault(pid, []).append(d)
+                  docs = grouped
+              data['procs'] = pay['procs']
+              data['docs'] = docs
           json.dump(data, open('acceso.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
-          print(len(users), 'teléfonos activos')
+          print(len(users), 'teléfonos activos,', len(data.get('procs', [])), 'procesos')
           PY
 
       - name: Publicar cambios
