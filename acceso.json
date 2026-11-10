@@ -6,12 +6,24 @@
  "procs": [
   {
    "id": "RHU-01",
-   "area": "RHU",
-   "group": "Time & Attendance",
-   "process": "Time & Attendance Management",
+   "area": "Administración",
+   "group": "Recursos Humanos",
+   "process": "Manuel del Empleado",
    "priority": "Alta",
-   "macro": "Ejecución Proyecto",
-   "scope": "Capture and approve time, overtime, lunch/break compliance and exceptions.",
+   "macro": "",
+   "scope": "",
+   "tools": "",
+   "owner": "",
+   "oculto": false
+  },
+  {
+   "id": "RHU-02",
+   "area": "Administración",
+   "group": "Recursos Humanos",
+   "process": "Acuse y consentimiento de información biométrica",
+   "priority": "Alta",
+   "macro": "",
+   "scope": "Formulario para registro y aceptación de asistencia con reconocimiento facial",
    "tools": "",
    "owner": "",
    "oculto": false
@@ -25,6 +37,15 @@
     "title": "Mauel del Empleado",
     "active": true,
     "url": "https://threeollc.sharepoint.com/:b:/s/ProcessRoadmap/IQBBTBBkKez-Rp45vAULGFM8ARH672qoPzfoz5oSjJMaeZA?e=Td29e9"
+   }
+  ],
+  "RHU-02": [
+   {
+    "type": "Formulario",
+    "code": "TOC-RHU-FR-001",
+    "title": "Formulario para llenado del Acuse y consentimiento biométrico",
+    "active": true,
+    "url": "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=Wdr5xw1TyEaLOTSY4WS48y3BlPHj3BtFtVaiXks9dBZUMlpGRFYxSUtXMUVFSUtTMjM2MTVSVU9VTS4u"
    }
   ]
  }
