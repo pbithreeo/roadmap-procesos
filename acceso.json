@@ -1,6 +1,8 @@
 {
  "salt": "3O-roadmap-2026",
- "users": [],
+ "users": [
+  "56dcd4adb2393ee5ebd11bbbf112645740a87ac68d0d06a986b399af16d8134c"
+ ],
  "procs": [
   {
    "id": "RHU-01",
