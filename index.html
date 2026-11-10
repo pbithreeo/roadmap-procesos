@@ -702,7 +702,7 @@ html[data-theme="light"] .theme-toggle .sun{stroke:#fff;}
       <button id="phoneBack" onclick="showPhoneLogin(false)">&larr; Volver al inicio de sesión</button>
     </div>
   </div>
-  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v61.5</span></div>
+  <div class="login-footer">&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v61.6</span></div>
   <div id="loginQrWrap">
     <button id="loginQrFab" title="Compartir acceso (QR)">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -892,7 +892,7 @@ html[data-theme="light"] .theme-toggle .sun{stroke:#fff;}
     </div>
   </main>
 
-  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v61.5</span></footer>
+  <footer>&copy; 2026 Three O LLC. Todos los derechos reservados. <span class="ver">&middot; Roadmap de Procesos v61.6</span></footer>
 </div>
 
 <div id="qrFullscreenOverlay">
@@ -1980,29 +1980,25 @@ function relocateFabForMobile(){
 window.addEventListener('resize', relocateFabForMobile);
 
 /* ---- ACCESO POR TELÉFONO (modo sencillo) ----
-   PHONE_API_URL: endpoint que valida el teléfono (Estatus Activo en Employee) y devuelve
-   { ok, name, procs:[...], docs:{ID:[...]} } solo con los documentos marcados "Acceso Sencillo".
-   Vacío = modo demostración con datos de ejemplo. */
-const PHONE_API_URL = '';
+   Valida el teléfono contra acceso.json (sin servidor intermedio). */
 function showPhoneLogin(on){
   document.querySelector('.login-card').classList.toggle('phone-mode', !!on);
   if(on) setTimeout(()=>document.getElementById('phoneInput').focus(),50);
 }
-function demoVerify(d){
-  if(d!=='7875551234') return {ok:false};
-  return {ok:true, name:'Empleado de ejemplo',
-    procs:[
-      {id:'RHU-01',area:'RHU',group:'Recursos Humanos',process:'Manual del Empleado',priority:'Alta',macro:'',scope:'Políticas, beneficios y normas generales para el personal.',tools:'',owner:'',oculto:false},
-      {id:'RHU-02',area:'RHU',group:'Recursos Humanos',process:'Acuse y consentimiento del sistema biométrico',priority:'Alta',macro:'',scope:'Firma electrónica del acuse de recibo y consentimiento de uso del sistema biométrico.',tools:'',owner:'',oculto:false}],
-    docs:{
-      'RHU-01':[{type:'Política',code:'TOC-RHU-PO-001',title:'Manual del Empleado',active:true,url:'#'}],
-      'RHU-02':[{type:'Formulario',code:'TOC-RHU-FR-001',title:'Formulario de acuse y consentimiento del sistema biométrico',active:true,url:'#'}]}};
+async function sha256Hex(txt){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
+/* acceso.json (junto a esta página): { salt, users:[hash,...], procs:[...], docs:{ID:[...]} }
+   Se genera desde el Excel con generar_acceso.py. Solo contiene teléfonos activos (como huella),
+   y los procesos/documentos marcados "Acceso Sencillo". */
 async function verifyPhone(d){
-  if(!PHONE_API_URL){ if(/[?&]demo=1/.test(location.search)) return demoVerify(d); throw new Error('El acceso por teléfono aún no está habilitado.'); }
-  const r = await fetch(PHONE_API_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:d})});
-  if(!r.ok) throw new Error('No se pudo validar el número');
-  return r.json();
+  const r = await fetch('acceso.json?'+Date.now(), {cache:'no-store'});
+  if(!r.ok) throw new Error('El acceso por teléfono aún no está habilitado.');
+  const data = await r.json();
+  const h = await sha256Hex((data.salt||'') + d);
+  if(!(data.users||[]).includes(h)) return {ok:false};
+  return {ok:true, name:'', procs:data.procs||[], docs:data.docs||{}};
 }
 async function submitPhone(){
   const st = document.getElementById('phoneStatus'), btn = document.getElementById('phoneBtn');
